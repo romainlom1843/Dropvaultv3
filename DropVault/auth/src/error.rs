@@ -5,6 +5,9 @@ use derive_more::Display;
 pub enum ServiceError {
     #[display(fmt = "Internal Server Error")]
     InternalServerError,
+    
+    #[display(fmt = "Not Found")]
+    NotFound,
 
     #[display(fmt = "BadRequest: {}", _0)]
     BadRequest(String),

@@ -1,8 +1,9 @@
 extern crate bcrypt;
+extern crate jsonwebtoken as jwt;
+extern crate rustc_serialize;
 
-use super::models::{NewUser, User, NewToken, Token};
+use super::models::{NewUser, User};
 use super::schema::users::dsl::*;
-use super::schema::tokens::dsl::*;
 use super::Pool;
 use crate::diesel::QueryDsl;
 use crate::diesel::RunQueryDsl;
@@ -10,16 +11,20 @@ use actix_web::{web, Error, HttpResponse};
 use diesel::dsl::{delete, insert_into};
 use serde::{Deserialize, Serialize};
 use std::vec::Vec;
-use bcrypt::{DEFAULT_COST, hash/*, verify*/};
+use bcrypt::{ hash, verify};
 use crate::diesel::ExpressionMethods;
+use diesel::NotFound;
 
 
-use hmac::{Hmac, NewMac};
-use jwt::SignWithKey;
-use sha2::Sha256;
-use std::collections::BTreeMap;
+use jwt::{encode, decode, Header, Algorithm};
+use rand::{distributions::Alphanumeric, Rng};
 
-
+#[derive(Debug, RustcEncodable, RustcDecodable)]
+struct Claims {
+    sub: String,
+    company: String,
+    exp: usize,
+}
 
 
 
@@ -59,9 +64,9 @@ pub async fn add_user( db: web::Data<Pool>,item: web::Json<InputSignUp>) -> Resu
 }
 fn add_single_user(db: web::Data<Pool>,item: web::Json<InputSignUp>) -> Result<User, diesel::result::Error> {
     let conn = db.get().expect("db recup");
-    let hashed = hash(&item.passwd, DEFAULT_COST).expect("password hashed");
+    let hashed = hash(&item.passwd, 6).expect("password hashed");
     let new_user = NewUser {
-       	username: &item.username,
+      	username: &item.username,
         email: &item.email,
         hashe: &hashed,
         created_at: chrono::Local::now().naive_local(),
@@ -82,32 +87,33 @@ pub async fn get_user(db: web::Data<Pool>, item: web::Json<InputLogin>) -> Resul
             .map_err(|_| HttpResponse::InternalServerError())?,
     )
 }
-fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Result<Token,diesel::result::Error> {
+fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Result<String,diesel::result::Error> {
     let conn = pool.get().expect("db_recup");
-    let hashed = hash(&item.passwd, DEFAULT_COST).expect("Password hashed");
-    let user_id = users.select(id).filter(username.eq(&item.username)).filter(hashe.eq(&hashed)).get_result::<i32>(&conn);
-   // if user_id == Error
-    //{
-     	let key: Hmac<Sha256> = Hmac::new_varkey(b"some-secret").expect("Hmac created");
-		let mut claims = BTreeMap::new();
-		claims.insert("sub", &item.username);
-		let token_str = claims.sign_with_key(&key).expect("token created");
-		let new_token = NewToken {
-		login : &item.username,
-       	token: &token_str,
-        created_at: chrono::Local::now().naive_local(),
-    };
-    
-		
-		 let res = insert_into(tokens).values(&new_token).get_result(&conn)?;
-    	 Ok(res)
-   // }
-   // else{
-    
-    
-    //}
-    
-   
+    let hashed = users.select(hashe).filter(username.eq(&item.username)).get_result::<String>(&conn).expect("Hashed");
+    let valid = verify(&item.passwd, &hashed).expect("Password verify");
+    if valid == true
+    {
+     	let my_claims = Claims {
+		sub: item.username.to_owned(),
+		company: "DropVault".to_owned(),
+		exp: 300000,
+    	};
+
+     	let mut header = Header::default();
+     	let s: String = rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(7)
+        .map(char::from)
+        .collect();
+		header.kid = Some(s.to_owned());
+		header.alg = Algorithm::HS256;
+		let token = encode(header, &my_claims, "mon_secret".as_ref()).expect("token created");
+    	Ok(token)
+    }
+else{
+    return Err(NotFound);
+    // Error 403
+    }  
 }
 
 

@@ -6,8 +6,6 @@ use actix_web::{dev::ServiceRequest, web, App, Error, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
-
-
  
 mod files;
 mod errors;
@@ -23,8 +21,7 @@ use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 
-/*async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
-println!{"ici2"};
+async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
     let config = req
         .app_data::<Config>()
         .map(|data| data.get_ref().clone())
@@ -39,7 +36,7 @@ println!{"ici2"};
         }
         Err(_) => Err(AuthenticationError::from(config).into()),
     }
-}*/
+}
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -55,16 +52,18 @@ async fn main() -> std::io::Result<()> {
         .expect("Failed to create pool.");
         
     HttpServer::new(move || {
-     //let auth = HttpAuthentication::bearer(validator);
+     
+     let auth = HttpAuthentication::bearer(validator);
+ 
      
         App::new()
-       		//.wrap(auth)
+       	.wrap(auth)
         	.data(pool.clone())
         	.route("/file/{filename}", web::get().to(files::get_file_id))
-            .route("/files/{username}", web::get().to(files::get_files))
-            .route("/download/{id}", web::get().to(files::download))
-            .route("/files", web::post().to(files::upload))
-            .route("/files/{id}", web::delete().to(files::delete_file))
+            	.route("/files/{username}", web::get().to(files::get_files))
+            	.route("/download/{id}", web::get().to(files::download))
+            	.route("/files", web::post().to(files::upload))
+            	.route("/files/{id}", web::delete().to(files::delete_file))
     })
     .bind("127.0.0.1:8084")?
     .run()

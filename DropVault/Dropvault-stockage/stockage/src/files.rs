@@ -51,10 +51,12 @@ pub async fn upload(  db: web::Data<Pool>, item: web::Json<InputFile>,) -> Resul
 }
 fn upload_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, diesel::result::Error> {
     let conn = db.get().expect("pool database");
-    //let id_file = files.select(id).filter(filename.eq(&item.filename)).filter(username.eq(&item.username)).limit(1).load(&conn)?;
+    let id_file = files.select(id).filter(filename.eq(&item.filename)).filter(username.eq(&item.username)).get_result::<i32>(&conn);
+   
+   
     
-  //  if id_file 
-   //{
+if id_file.is_ok() == false
+  {
     let new_file = NewFile {
         filename: &item.filename,
         content: &item.content,
@@ -63,12 +65,12 @@ fn upload_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, 
     };
     let res = insert_into(files).values(&new_file)/*.on_conflict((filename, username)).do_update().set(content.eq(&item.content))*/.get_result::<File>(&conn)?;
     Ok(res)
-  //  }
- /* else
+    }
+  else
     {
      //let update = diesel::update(files.find(id_file)).set(content.eq(&item.content)).get_result(&conn)?;
      //Ok(update)
-       delete_file_id( db,  id_file);
+       delete_file_id( db,  id_file?);
        let new_file = NewFile {
         filename: &item.filename,
         content: &item.content,
@@ -77,7 +79,7 @@ fn upload_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, 
     };
     let res = insert_into(files).values(&new_file).get_result(&conn)?;
     Ok(res)
-    }*/
+    }
    
 }
 
