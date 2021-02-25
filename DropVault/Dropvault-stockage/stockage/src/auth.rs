@@ -1,7 +1,7 @@
 use crate::errors::ServiceError;
 use serde::{Deserialize, Serialize};
-use jsonwebtoken::{decode, DecodingKey, Validation, Algorithm};
-use std::error::Error;
+use jsonwebtoken::{decode, DecodingKey, Validation};
+
 
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -53,7 +53,7 @@ async fn main() -> std::io::Result<()> {
         
     HttpServer::new(move || {
      
-     let auth = HttpAuthentication::bearer(validator);
+    let auth = HttpAuthentication::bearer(validator);
  
      
         App::new()
@@ -64,6 +64,7 @@ async fn main() -> std::io::Result<()> {
             	.route("/download/{id}", web::get().to(files::download))
             	.route("/files", web::post().to(files::upload))
             	.route("/files/{id}", web::delete().to(files::delete_file))
+            	.route("/echange",web::post().to(files::echange))
     })
     .bind("127.0.0.1:8084")?
     .run()

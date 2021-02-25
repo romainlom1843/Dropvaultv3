@@ -15,8 +15,8 @@ use bcrypt::{ hash, verify};
 use crate::diesel::ExpressionMethods;
 use diesel::NotFound;
 
-
-use jwt::{encode, decode, Header, Algorithm};
+use chrono::prelude::*;
+use jwt::{encode, Header, Algorithm};
 use rand::{distributions::Alphanumeric, Rng};
 
 #[derive(Debug, RustcEncodable, RustcDecodable)]
@@ -90,13 +90,14 @@ pub async fn get_user(db: web::Data<Pool>, item: web::Json<InputLogin>) -> Resul
 fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Result<String,diesel::result::Error> {
     let conn = pool.get().expect("db_recup");
     let hashed = users.select(hashe).filter(username.eq(&item.username)).get_result::<String>(&conn).expect("Hashed");
+    let expiration = Utc::now().checked_add_signed(chrono::Duration::seconds(300)).expect("valid timestamp").timestamp();
     let valid = verify(&item.passwd, &hashed).expect("Password verify");
     if valid == true
     {
      	let my_claims = Claims {
 		sub: item.username.to_owned(),
 		company: "DropVault".to_owned(),
-		exp: 300000,
+		exp: expiration as usize,
     	};
 
      	let mut header = Header::default();

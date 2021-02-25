@@ -7,9 +7,10 @@ use actix_web::{web, Error, HttpResponse};
 use diesel::dsl::{delete, insert_into};
 use serde::{Deserialize, Serialize};
 use std::vec::Vec;
-use diesel::sql_query;
 use crate::diesel::ExpressionMethods;
-use diesel::expression::dsl::now;
+use diesel::NotFound;
+use std::fs::File;
+use std::io::Write;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputFile {
@@ -20,19 +21,20 @@ pub struct InputFile {
 
 
 //Recuperer id d'un file
-pub async fn get_file_id(db: web::Data<Pool>, file_name: web::Path<String>) -> Result<HttpResponse, Error> {
-
+pub async fn get_file_id(db: web::Data<Pool>, file_name: web::Path<String>/*, user_name: web::Path<String>*/) -> Result<HttpResponse, Error> {
+ println!("ici2");
 	Ok(
-		web::block(move || get_files_id(db, file_name.to_string()))
+		web::block(move || get_files_id(db, file_name.to_string()/*, user_name.to_string()*/))
         	.await
         	.map(|file| HttpResponse::Ok().json(file))
         	.map_err(|_| HttpResponse::InternalServerError())?)
    
 }
-fn get_files_id(pool: web::Data<Pool>, file_name: String) -> Result<i32, diesel::result::Error> {
+fn get_files_id(pool: web::Data<Pool>, file_name: String/*, user_name: String*/) -> Result<i32, diesel::result::Error> {
 	
+    println!("ici");
     let conn = pool.get().expect("database pool");
-    let file_id = files.select(id).filter(filename.eq(&file_name)).first::<i32>(&conn)?;
+    let file_id = files.select(id).filter(filename.eq(&file_name))/*.filter(username.eq(&user_name))*/.first::<i32>(&conn)?;
     Ok(file_id)
     
 }
@@ -70,7 +72,7 @@ if id_file.is_ok() == false
     {
      //let update = diesel::update(files.find(id_file)).set(content.eq(&item.content)).get_result(&conn)?;
      //Ok(update)
-       delete_file_id( db,  id_file?);
+       delete_file_id( db,  id_file?)?;
        let new_file = NewFile {
         filename: &item.filename,
         content: &item.content,
@@ -82,6 +84,12 @@ if id_file.is_ok() == false
     }
    
 }
+/*pub async fn uplContent(content: String, id : i32)-> Result<HttpResponse, Error>{
+
+let file_name = "../../stock" + id.to_string();
+let mut file = File::create(&file_name).expect("file created");
+file.write_all(content).encrypt("Don't write");
+}*/
 
 
 
@@ -143,5 +151,42 @@ fn delete_file_id(db: web::Data<Pool>, file_id: i32) -> Result<usize, diesel::re
     let conn = db.get().unwrap();
     let count = delete(files.find(file_id)).execute(&conn)?;
     Ok(count)
+}
+
+
+
+
+
+
+// Echange file
+pub async fn echange(  db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<HttpResponse, Error>{
+	
+    Ok(web::block(move || upload_file(db, item))
+        .await
+        .map(|file| HttpResponse::Created().json(file))
+        .map_err(|_| HttpResponse::InternalServerError())?)
+}
+fn echange_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, diesel::result::Error> {
+    let conn = db.get().expect("pool database");
+    let id_file = files.select(id).filter(filename.eq(&item.filename)).filter(username.eq(&item.username)).get_result::<i32>(&conn);
+   
+   
+    
+if id_file.is_ok() == false
+  {
+    let new_file = NewFile {
+        filename: &item.filename,
+        content: &item.content,
+        username: &item.username,
+        created_at: chrono::Local::now().naive_local(),
+    };
+    let res = insert_into(files).values(&new_file)/*.on_conflict((filename, username)).do_update().set(content.eq(&item.content))*/.get_result::<File>(&conn)?;
+    Ok(res)
+    }
+  else
+    {
+     return Err(NotFound);
+    }
+   
 }
 
