@@ -6,6 +6,8 @@ use actix_web::{dev::ServiceRequest, web, App, Error, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
+
+
  
 mod files;
 mod errors;
@@ -53,7 +55,7 @@ async fn main() -> std::io::Result<()> {
         
     HttpServer::new(move || {
      
-    let auth = HttpAuthentication::bearer(validator);
+   let auth = HttpAuthentication::bearer(validator);
  
      
         App::new()
@@ -63,8 +65,11 @@ async fn main() -> std::io::Result<()> {
             	.route("/files/{username}", web::get().to(files::get_files))
             	.route("/download/{id}", web::get().to(files::download))
             	.route("/files", web::post().to(files::upload))
+            	.route("/upload", web::post().to(files::upl_content))
+            	.route("/dwl/{id}", web::get().to(files::dwl_content))
             	.route("/files/{id}", web::delete().to(files::delete_file))
             	.route("/echange",web::post().to(files::echange))
+            	.route("/remove/{id}", web::delete().to(files::remove_content))
     })
     .bind("127.0.0.1:8084")?
     .run()

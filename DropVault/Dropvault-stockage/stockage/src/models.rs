@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 pub struct File {
     pub id: i32,
     pub filename: String,
-    pub content: String,
     pub username: String,
     pub created_at: chrono::NaiveDateTime,
 }
@@ -13,7 +12,6 @@ pub struct File {
 #[table_name = "files"]
 pub struct NewFile<'a> {
     pub filename: &'a str,
-    pub content: &'a str,
     pub username: &'a str,
     pub created_at: chrono::NaiveDateTime,
 }

@@ -3,20 +3,23 @@ use super::schema::files::dsl::*;
 use super::Pool;
 use crate::diesel::QueryDsl;
 use crate::diesel::RunQueryDsl;
-use actix_web::{web, Error, HttpResponse};
+use actix_web::{web, Error, HttpResponse, Responder};
 use diesel::dsl::{delete, insert_into};
 use serde::{Deserialize, Serialize};
 use std::vec::Vec;
 use crate::diesel::ExpressionMethods;
 use diesel::NotFound;
-use std::fs::File;
 use std::io::Write;
-
+use std::io::Read;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputFile {
     pub filename: String,
-    pub content: String,
     pub username: String,
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InputContent{
+	pub content : String,
+	pub id_c : i32,
 }
 
 
@@ -61,7 +64,6 @@ if id_file.is_ok() == false
   {
     let new_file = NewFile {
         filename: &item.filename,
-        content: &item.content,
         username: &item.username,
         created_at: chrono::Local::now().naive_local(),
     };
@@ -75,7 +77,6 @@ if id_file.is_ok() == false
        delete_file_id( db,  id_file?)?;
        let new_file = NewFile {
         filename: &item.filename,
-        content: &item.content,
         username: &item.username,
         created_at: chrono::Local::now().naive_local(),
     };
@@ -84,12 +85,14 @@ if id_file.is_ok() == false
     }
    
 }
-/*pub async fn uplContent(content: String, id : i32)-> Result<HttpResponse, Error>{
+pub async fn upl_content(item:web::Json<InputContent>)-> impl Responder{
 
-let file_name = "../../stock" + id.to_string();
-let mut file = File::create(&file_name).expect("file created");
-file.write_all(content).encrypt("Don't write");
-}*/
+	let path = "../stock/";
+	let file_name= path.to_owned() + &item.id_c.to_string();
+	let mut file = std::fs::File::create(&file_name).expect("file created");
+	file.write_all(&item.content.as_bytes()).expect("Don't write");
+	HttpResponse::Ok().body("Rsponse")
+}
 
 
 
@@ -114,7 +117,17 @@ fn db_download(pool: web::Data<Pool>, file_id: i32) -> Result<File, diesel::resu
    
     
 }
+pub async fn dwl_content(file_id: web::Path<i32>)-> String{
 
+	let path = "../stock/";
+	let file_name= path.to_owned() + &file_id.to_string();
+	let mut file = std::fs::File::open(&file_name).expect("file don't load");
+	/*let metadata= std::fs::metadata(&file_name).expect("unable to read metadata");
+	let mut buffer= vec![0; metadata.len() as usize];*/
+	let mut contents =String::new();
+	file.read_to_string(&mut contents).expect("File read");
+	return contents;
+}
 
 
 //Recuperer tous les fichiers par username
@@ -152,6 +165,14 @@ fn delete_file_id(db: web::Data<Pool>, file_id: i32) -> Result<usize, diesel::re
     let count = delete(files.find(file_id)).execute(&conn)?;
     Ok(count)
 }
+pub async fn remove_content(file_id: web::Path<i32>)-> impl Responder{
+
+	let path = "../stock/";
+	let file_name= path.to_owned() + &file_id.to_string();
+	std::fs::remove_file(&file_name).expect("file don't load");
+	HttpResponse::Ok().body("Delete")
+	
+}
 
 
 
@@ -161,7 +182,7 @@ fn delete_file_id(db: web::Data<Pool>, file_id: i32) -> Result<usize, diesel::re
 // Echange file
 pub async fn echange(  db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<HttpResponse, Error>{
 	
-    Ok(web::block(move || upload_file(db, item))
+    Ok(web::block(move || echange_file(db, item))
         .await
         .map(|file| HttpResponse::Created().json(file))
         .map_err(|_| HttpResponse::InternalServerError())?)
@@ -176,7 +197,6 @@ if id_file.is_ok() == false
   {
     let new_file = NewFile {
         filename: &item.filename,
-        content: &item.content,
         username: &item.username,
         created_at: chrono::Local::now().naive_local(),
     };
