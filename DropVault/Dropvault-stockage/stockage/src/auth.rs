@@ -13,9 +13,8 @@ struct Claims {
 
 pub fn validate_token(token: &str) -> Result<bool, ServiceError> {
 
-println!("{:?}", token);
+
     let token_decode = decode::<Claims>(&token, &DecodingKey::from_secret("mon_secret".as_ref()), &Validation::default());
-    println!("{:?}",token_decode);
     Ok(token_decode.is_ok())
 }
 

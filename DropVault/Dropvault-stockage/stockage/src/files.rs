@@ -25,7 +25,7 @@ pub struct InputContent{
 
 //Recuperer id d'un file
 pub async fn get_file_id(db: web::Data<Pool>, file_name: web::Path<String>/*, user_name: web::Path<String>*/) -> Result<HttpResponse, Error> {
- println!("ici2");
+
 	Ok(
 		web::block(move || get_files_id(db, file_name.to_string()/*, user_name.to_string()*/))
         	.await
@@ -35,7 +35,7 @@ pub async fn get_file_id(db: web::Data<Pool>, file_name: web::Path<String>/*, us
 }
 fn get_files_id(pool: web::Data<Pool>, file_name: String/*, user_name: String*/) -> Result<i32, diesel::result::Error> {
 	
-    println!("ici");
+    
     let conn = pool.get().expect("database pool");
     let file_id = files.select(id).filter(filename.eq(&file_name))/*.filter(username.eq(&user_name))*/.first::<i32>(&conn)?;
     Ok(file_id)
@@ -117,7 +117,7 @@ fn db_download(pool: web::Data<Pool>, file_id: i32) -> Result<File, diesel::resu
    
     
 }
-pub async fn dwl_content(file_id: web::Path<i32>)-> String{
+pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 
 	let path = "../stock/";
 	let file_name= path.to_owned() + &file_id.to_string();
@@ -126,7 +126,7 @@ pub async fn dwl_content(file_id: web::Path<i32>)-> String{
 	let mut buffer= vec![0; metadata.len() as usize];*/
 	let mut contents =String::new();
 	file.read_to_string(&mut contents).expect("File read");
-	return contents;
+	HttpResponse::Ok().body(contents)
 }
 
 
