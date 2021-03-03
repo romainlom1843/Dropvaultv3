@@ -11,33 +11,42 @@ use crate::diesel::ExpressionMethods;
 use diesel::NotFound;
 use std::io::Write;
 use std::io::Read;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputFile {
     pub filename: String,
     pub username: String,
+    pub sizing: String,
+    pub ext: String,
 }
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputContent{
 	pub content : String,
 	pub id_c : i32,
 }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FileInfo{
+	pub user_name : String,
+	pub file_name : String,
+	
+}
 
 
 //Recuperer id d'un file
-pub async fn get_file_id(db: web::Data<Pool>, file_name: web::Path<String>/*, user_name: web::Path<String>*/) -> Result<HttpResponse, Error> {
+pub async fn get_file_id(db: web::Data<Pool>, info: web::Path<FileInfo>) -> Result<HttpResponse, Error> {
 
 	Ok(
-		web::block(move || get_files_id(db, file_name.to_string()/*, user_name.to_string()*/))
+		web::block(move || get_files_id(db, info.user_name.to_string() , info.file_name.to_string()))
         	.await
         	.map(|file| HttpResponse::Ok().json(file))
         	.map_err(|_| HttpResponse::InternalServerError())?)
    
 }
-fn get_files_id(pool: web::Data<Pool>, file_name: String/*, user_name: String*/) -> Result<i32, diesel::result::Error> {
+fn get_files_id(pool: web::Data<Pool>, user_name: String, file_name: String) -> Result<i32, diesel::result::Error> {
 	
     
     let conn = pool.get().expect("database pool");
-    let file_id = files.select(id).filter(filename.eq(&file_name))/*.filter(username.eq(&user_name))*/.first::<i32>(&conn)?;
+    let file_id = files.select(id).filter(username.eq(&user_name)).filter(filename.eq(&file_name)).first::<i32>(&conn)?;
     Ok(file_id)
     
 }
@@ -65,6 +74,8 @@ if id_file.is_ok() == false
     let new_file = NewFile {
         filename: &item.filename,
         username: &item.username,
+        sizing: &item.sizing,
+    	ext: &item.ext,
         created_at: chrono::Local::now().naive_local(),
     };
     let res = insert_into(files).values(&new_file)/*.on_conflict((filename, username)).do_update().set(content.eq(&item.content))*/.get_result::<File>(&conn)?;
@@ -78,6 +89,8 @@ if id_file.is_ok() == false
        let new_file = NewFile {
         filename: &item.filename,
         username: &item.username,
+        sizing: &item.sizing,
+    	ext: &item.ext,
         created_at: chrono::Local::now().naive_local(),
     };
     let res = insert_into(files).values(&new_file).get_result(&conn)?;
@@ -130,7 +143,7 @@ pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 }
 
 
-//Recuperer tous les fichiers par username
+//Recuperer tous les noms par username
 pub async fn get_files(db: web::Data<Pool>, file_username: web::Path<String>) -> Result<HttpResponse, Error> {
 
 	Ok(
@@ -144,6 +157,40 @@ fn get_files_by_user(pool: web::Data<Pool>, file_username: String) -> Result<Vec
 	
     let conn = pool.get().expect("database pool");
     let items = files.select(filename).filter(username.eq(&file_username)).load::<String>(&conn)?;
+    Ok(items)
+    
+}
+//Recuperer toutes les tailles par username
+pub async fn get_size(db: web::Data<Pool>, file_username: web::Path<String>) -> Result<HttpResponse, Error> {
+
+	Ok(
+		web::block(move || get_size_by_user(db, file_username.to_string()))
+        	.await
+        	.map(|file| HttpResponse::Ok().json(file))
+        	.map_err(|_| HttpResponse::InternalServerError())?)
+   
+}
+fn get_size_by_user(pool: web::Data<Pool>, file_username: String) -> Result<Vec<String>, diesel::result::Error> {
+	
+    let conn = pool.get().expect("database pool");
+    let items = files.select(sizing).filter(username.eq(&file_username)).load::<String>(&conn)?;
+    Ok(items)
+    
+}
+//Recuperer toutes les types par username
+pub async fn get_type(db: web::Data<Pool>, file_username: web::Path<String>) -> Result<HttpResponse, Error> {
+
+	Ok(
+		web::block(move || get_type_by_user(db, file_username.to_string()))
+        	.await
+        	.map(|file| HttpResponse::Ok().json(file))
+        	.map_err(|_| HttpResponse::InternalServerError())?)
+   
+}
+fn get_type_by_user(pool: web::Data<Pool>, file_username: String) -> Result<Vec<String>, diesel::result::Error> {
+	
+    let conn = pool.get().expect("database pool");
+    let items = files.select(ext).filter(username.eq(&file_username)).load::<String>(&conn)?;
     Ok(items)
     
 }
@@ -198,6 +245,8 @@ if id_file.is_ok() == false
     let new_file = NewFile {
         filename: &item.filename,
         username: &item.username,
+        sizing: &item.sizing,
+    	ext: &item.ext,
         created_at: chrono::Local::now().naive_local(),
     };
     let res = insert_into(files).values(&new_file)/*.on_conflict((filename, username)).do_update().set(content.eq(&item.content))*/.get_result::<File>(&conn)?;

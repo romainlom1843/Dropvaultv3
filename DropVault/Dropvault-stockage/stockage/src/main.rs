@@ -55,14 +55,16 @@ async fn main() -> std::io::Result<()> {
         
     HttpServer::new(move || {
      
-   let auth = HttpAuthentication::bearer(validator);
+  let auth = HttpAuthentication::bearer(validator);
  
      
         App::new()
        	.wrap(auth)
         	.data(pool.clone())
-        	.route("/file/{filename}", web::get().to(files::get_file_id))
+        	.route("/file/{user_name}/{file_name}", web::get().to(files::get_file_id))
             	.route("/files/{username}", web::get().to(files::get_files))
+            	.route("/size/{username}", web::get().to(files::get_size))
+            	.route("/type/{username}", web::get().to(files::get_type))
             	.route("/download/{id}", web::get().to(files::download))
             	.route("/files", web::post().to(files::upload))
             	.route("/upload", web::post().to(files::upl_content))
