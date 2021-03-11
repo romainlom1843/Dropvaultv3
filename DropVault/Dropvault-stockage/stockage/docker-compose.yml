@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    volumes: 
+    - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: files
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+     - "8084:8084"
+    links:
+      - "db:db"
+    env_file:
+      - .env
+volumes:
+  pgdata:

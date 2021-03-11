@@ -1,0 +1,438 @@
+ 1001 sudo nano /etc/hosts 1002 ping 127.0.0.2 1003 ping 127.0.0.3 1004 
+ ping 128.0.0.3 1005 ping example1.test 1006 docker ps 1007 sudo curl 
+ example1.test 1008 curl example1.test 1009 docker ps 1010 docker ps -a 
+ 1011 docker start proxy_proxy_1 1012 docker ps -a 1013 ping 
+ example1.test 1014 ping example2.test 1015 hostname -I 1016 sudo nano 
+ /etc/hosts 1017 ping example1.test 1018 sudo nano /etc/hosts 1019 ping 
+ example2.test 1020 sudo docker-compose build 1021 sudo docker-compose 
+ up -d 1022 sudo docker ps -a 1023 docker start example2_app_1 1024 sudo 
+ docker ps -a 1025 curl example1.test 1026 curl --url 
+ http://example1.test 1027 sudo docker-compose build . 1028 sudo 
+ docker-compose build 1029 docker start $(docker ps -a -q --filter 
+ "status=exited") 1030 docker ps 1031 docker ps -a 1032 docker start 
+ $(docker ps -a -q --filter "status=exited") 1033 docker ps -a 1034 
+ docker run -t -d c5cc38097bc2 1035 docker run -t -d proxy_proxy 1036 
+ docker ps 1037 docker ps -a 1038 docker rm pedantic_varahamihira 1039 
+ docker ps 1040 docker images 1041 docker rmi containous/whoami:latest 
+ 1042 docker images 1043 docker rmi proxy_proxy:latest 1044 docker rmi 
+ proxy_proxy 1045 docker ps 1046 docker ps -a 1047 docker rm 
+ proxy_proxy_1 1048 docker images 1049 docker rmi proxy_proxy:latest 
+ 1050 docker ps 1051 sudo docker-compose build 1052 sudo docker-compose 
+ up -d 1053 sudo docker ps -a 1054 sudo curl example1.test 1055 touch 
+ acme.json 1056 cd conf/ 1057 ls 1058 touch traefik.toml 1059 sudo chmod 
+ 0600 acme.json 1060 ls 1061 ps 1062 ls -al 1063 docker network create 
+ oueb 1064 docker ps 1065 cd /var/ 1066 ls 1067 python --ver 1068 ls 
+ 1069 touch docker-compose.yml 1070 docker-compose up -d 1071 docker ps 
+ 1072 docker-compose up -d 1073 docker ps 1074 docker ps -a 1075 docker 
+ rm proxy_proxy_1 1076 docker rm example2_app_1 1077 docker rm 
+ example1_app_1 1078 docker images 1079 docker rmi proxy_proxy:latest 
+ 1080 docker images 1081 docker ps -al 1082 docker ps -la 1083 docker ps 
+ -a 1084 docker start dropvault-upload 1085 docker-compose up -d 1086 
+ docker start dropvault-upload 1087 curl -X GET -i 
+ 'http://127.0.0.1:8080/api/ping' 1088 curl -X GET -i 
+ 'http://127.0.0.1:8080' 1089 curl -X GET -i 'http://127.0.0.1:80' 1090 
+ curl -X GET -i 'http://127.0.0.1:80/api/ping' 1091 docker ps 1092 
+ docker stop traefik_traefik_1 1093 docker ps 1094 docker rm 
+ traefik_traefik_1 1095 docker images 1096 docker ps 1097 docker stop t 
+ 1098 docker ps 1099 cd Documents/ 1100 ls 1101 cd 
+ Dropvault-authentification/ 1102 docker-compose up -d --build 1103 
+ docker-compose.proto up -d --build 1104 docker-compose -f 
+ docker-compose.proto.yml up 1105 docker network create webgateway 1106 
+ ls 1107 docker-compose up -d --build 1108 docker ps 1109 docker ps -a 
+ 1110 docker-compose up -d 1111 docker ps -a 1112 docker images 1113 
+ docker ps 1114 docker stop address_book_ 1115 docker stop 
+ address_book_be 1116 docker stop address_book_db 1117 docker system 
+ prune -a 1118 docker images 1119 docker network create webgateway 1120 
+ docker-compose up -d --build 1121 docker ps -a 1122 docker start 
+ traefik_traefik_1 1123 docker ps -a 1124 docker start traefik_traefik_1 
+ 1125 docker ps -a 1126 docker-compose up -d --build 1127 docker ps -a 
+ 1128 docker compose up -d 1129 docker-compose up -d 1130 docker ps 1131 
+ docker-compose up -d 1132 docker ps 1133 docker-compose up -d --build 
+ 1134 docker-compose up -d 1135 docker ps 1136 docker system prune -a 
+ 1137 docker system prune - 1138 docker system prune -y 1139 docker 
+ system prune -a 1140 docker ps -a 1141 docker stop address_book_be 1142 
+ docker stop address_book_db 1143 docker stop $(docker ps -a -q) 1144 
+ docker ps 1145 docker ps -a 1146 docker start traefik_traefik_1 1147 
+ docker ps 1148 docker start address_book_ 1149 docker start 
+ address_book_be 1150 docker start address_book_db 1151 docker ps 1152 
+ docker stop $(docker ps -a -q) 1153 $ docker rm $(docker ps -a -q) 1154 
+ docker rm $(docker ps -a -q) 1155 docker ps 1156 docker ps -a 1157 
+ docker-compose up -d --build 1158 docker ps 1159 $ docker rm $(docker 
+ ps -a -q) 1160 docker stop $(docker ps -a -q) 1161 docker rm $(docker 
+ ps -a -q) 1162 docker-compose up -d --build 1163 docker ps 1164 docker 
+ ps -a 1165 docker stop $(docker ps -a -q) 1166 docker rm $(docker ps -a 
+ -q) 1167 docker-compose up -d 1168 docker system prune -a 1169 docker 
+ ps 1170 docker stop $(docker ps -a -q) 1171 docker rm $(docker ps -a 
+ -q) 1172 docker network create web 1173 docker ps -a 1174 
+ docker-compose up -d 1175 docker ps 1176 docker compose up -d --build 
+ 1177 docker-compose up -d --build 1178 docker-compose up -d --build 
+ 1179 docker pos 1180 docker ps 1181 docker-compose up -d 1182 
+ docker-compose up 1183 docker compose up -d 1184 docker-compose up -d 
+ 1185 docker ps 1186 docker stop $(docker ps -a -q) 1187 docker rm 
+ $(docker ps -a -q) 1188 docker network create webgateway 1189 
+ docker-compose up -d 1190 docker ps 1191 docker ps -a 1192 docker stop 
+ $(docker ps -a -q) 1193 docker rm $(docker ps -a -q) 1194 
+ docker-compose up -d 1195 docker ps 1196 docker stop $(docker ps -a -q) 
+ 1197 docker rm $(docker ps -a -q) 1198 docker-compose up -d 1199 docker 
+ network create webgateway 1200 docker system prune -a 1201 docker 
+ network create webgateway 1202 docker-compose up -d 1203 docker network 
+ 1204 docker network ls 1205 docker system prune-a 1206 docker system 
+ prune -a 1207 docker-compose up -d 1208 docker network ls 1209 docker 
+ network create webgateway 1210 docker-compose up -d 1211 docker network 
+ ls 1212 docker system prune -a 1213 docker network create web 1214 
+ docker network ls 1215 docker-compose up -d 1216 docker system prune -a 
+ 1217 docker stop $(docker ps -a -q) 1218 docker system prune -a 1219 
+ docker ps 1220 docker-compose up -d 1221 docker network create web 1222 
+ docker-compose up -d 1223 docker-compose up --build 1224 docker system 
+ prune -a 1225 docker ps 1226 docker stop traefik_traefik_1 1227 docker 
+ system prune -a 1228 docker-compose up -d 1229 docker network ls 1230 
+ docker ps 1231 docker-compose -f docker-compose.proto.yml up 1232 
+ docker network ps 1233 docker network ls 1234 docker network create web 
+ 1235 docker-compose -f docker-compose.proto.yml up 1236 rustc 1237 
+ touch create.rs 1238 docker ps 1239 .\lance-upload.sh 1240 
+ lance-upload.sh 1241 pwd 1242 npm install @types/webassembly-js-api 
+ --dev --save 1243 1 1244 npm install @types/webassembly-js-api --dev 
+ --save 1245 sudo npm install @types/webassembly-js-api --dev --save 
+ 1246 sudo npm install @types/webassembly-js-api --also=dev --save 1247 
+ npm install webassembly 1248 docker ps 1249 pwd 1250 touch chiff-fil 
+ 1251 touch file.txt 1252 cargo run 1253 cargo install wasm-gc 1254 
+ cargo install wasm-pack 1255 cargo install miniserve 1256 rustup target 
+ add wasm32-unknown-unknown 1257 cargo build --target 
+ wasm32-unknown-unknown --release 1258 wasm-gc 
+ ./target/wasm32-unknown-unknown/release/chiffrement.wasm 
+ ./chiffrement.wasm 1259 cargo build --target wasm32-unknown-unknown 
+ --release 1260 ./lance-upload.sh 1261 cargo new 1262 cargo new chiff 
+ 1263 cargo run 1264 cargo install wasm-gc 1265 cargo install wasm-pack 
+ 1266 cargo install miniserve 1267 rustup target add 
+ wasm32-unknown-unknown 1268 cargo build --target wasm32-unknown-unknown 
+ --release 1269 cargo init --lib 1270 cargo build --target 
+ wasm32-unknown-unknown --release 1271 wasm-gc 
+ ./target/wasm32-unknown-unknown/release/wasm_example.wasm 
+ ./wasm_example_rust.wasm 1272 wasm-gc 
+ ./target/wasm32-unknown-unknown/release/chiff.wasm ./chiff.wasm 1273 
+ rustup target add wasm32-unknow-unknow 1274 rustup target add 
+ wasm32-unknown-unknown 1275 wasm-gc 1276 wasm-gc 
+ ./target/wasm32-unknown-unknown/release/chiff.wasm ./chiff.wasm 1277 
+ cargo build --target wasm32-unknown-unknown --release 1278 cargo init 
+ --lib 1279 rustup target add wasm32-unknown-unknown 1280 cargo build 
+ --target wasm32-unknown-unknown --release 1281 rustup update 1282 cargo 
+ build --target wasm32-unknown-unknown --release 1283 cargo new chiff 
+ 1284 cargo run 1285 cargo run 1286 rustup target add 
+ wasm32-unknown-unknown 1287 cargo build --target wasm32-unknown-unknown 
+ --release 1288 rustc --version 1289 rustup default nightly 1290 rustc 
+ --version 1291 rustup default nightly 1292 rustc --version 1293 rustup 
+ update 1294 rustc --version 1295 rustup run nightly cargo build 1296 
+ cargo build --target wasm32-unknown-unknown --release 1297 rustc 
+ --version 1298 rustup override set nightly 1299 rustc --version 1300 
+ rustup toolchain install nightly 1301 rust --version 1302 rustup 
+ --version 1303 cargo build --target wasm32-unknown-unknown --release 
+ 1304 ng serve 1305 cd DropVault/ 1306 ng serve 1307 ng generate service 
+ wasm 1308 ng serve 1309 ng servicez 1310 ng service 1311 ng serv 1312 
+ ng serve 1313 docker ps 1314 docker-compose -f docker-compose.local.yml 
+ up 1315 curl https://rustwasm.github.io/wasm-pack/installer/init.sh 
+ -sSf | sh 1316 wasm-pack new hello-was 1317 wasm-pack new hello-wasm 
+ 1318 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
+ 1319 wasm-pack new hello-wasm 1320 wasm-pack 1321 wasm-pack --vers 1322 
+ wasm-pack --version 1323 wasm-pack new 1324 wasm-pack new hello 1325 
+ cargo --version 1326 cargo install cargo-generate 1327 wasm-pack new 
+ hello-wasm 1328 cd hello-wasm/ 1329 wasm-pack build --target web 1330 
+ wasm-pack new hello-wasm 1331 ls 1332 cargo install wasm-pack 1333 
+ cargo new --lib hello-wasm 1334 wasm-pack build 1335 cd hello-wasm/ 
+ 1336 wasm-pack build 1337 rustup 1338 apt-update rustup 1339 apt update 
+ rustup 1340 apt update 1341 sudo apt update 1342 wasm-pack build 1343 
+ curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh 
+ 1344 wasm-pack build 1345 rustc version 1346 rustc --version 1347 
+ rustup self uninstall 1348 brew install rust 1349 wasm-pack build 1350 
+ rustup 1351 rustup --version 1352 rustup 1353 wasm-pack build 1354 
+ rustup --version 1355 curl 
+ https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh 1356 
+ sudo curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | 
+ sh 1357 wasm-pack build 1358 rustup self uninstall 1359 brew uninstall 
+ rust 1360 brew unlink rust 1361 rustup 1362 rustup --veri 1363 rustup 
+ self uninstall 1364 rustup 1365 rustup self uninstall 1366 which rustup 
+ 1367 cd /snap/bin/ 1368 ls 1369 rm -r rustc 1370 sudo rm -r rustc 1371 
+ sudo rm -r rustdoc 1372 sudo rm -r rustfmt 1373 sudo rm -r rustup 1374 
+ sudo rm -r rustup.cargo 1375 sudo rm -r rustup.cargo-fmt 1376 sudo rm 
+ -r rustup.cargo-miri 1377 sudo rm -r rustup.cargo-clippy 1378 ls 1379 
+ sudo rm -r rustup.clippy-driver 1380 sudo rm -r rustup.rls 1381 sudo rm 
+ -r rustup.rustc 1382 ls 1383 sudo rm -r rustup.rustdoc 1384 sudo rm -r 
+ cargo 1385 sudo rm -r cargo-clippy 1386 sudo rm -r cargo-fmt 1387 sudo 
+ rm -r cargo-miri 1388 sudo rm -r cargo-driver 1389 sudo rm -r 
+ clippy-driver 1390 ls 1391 sudo rm -r rustup.rustfmt 1392 sudo rm -r 
+ rls 1393 ls 1394 git clone 
+ https://github.com/romainlom1843/Dropvaultv3.git 1395 ls 1396 cd 
+ Dropvault 1397 cd Dropvaultv3 1398 ls 1399 cd DropVault/ 1400 LS 1401 
+ ls 1402 cd DropVault-V1/ 1403 ls 1404 cd.. 1405 cd ..* 1406 git clone 
+ https://github.com/romainlom1843/DropVault-V1.git 1407 ls 1408 cd 
+ DropVault-V1/$ 1409 cd DropVault-V1/ 1410 ls 1411 cd DropVault/ 1412 ls 
+ 1413 git pull 1414 docker ps 1415 touch Dockerfile 1416 ls 1417 sl 1418 
+ ls 1419 cargo run 1420 sudo apt install gcc-multilib 1421 cargo run 
+ 1422 cargo build 1423 cargo rebuild 1424 cargo do clean build 1425 
+ cargo clean 1426 sudo chown -R $USER:$USER target 1427 cargo run 1428 
+ diesel setup 1429 diesel set up 1430 diesel setup 1431 cargo install 
+ diesel_cli --no-default-features --features postgres 1432 cargo clean 
+ 1433 cargo run 1434 docker build -t image-upv2 . 1435 docker build -t 
+ image-upload . 1436 docker build -t myapp . 1437 COPY --chown=node:node 
+ . . 1438 docker build -t my-rust-app . 1439 docker build -t mystorage . 
+ 1440 cargo clean 1441 docker build -t mystorage . 1442 docker build -t 
+ mystorage .$ 1443 docker build -t mystorage . 1444 docker ps 1445 
+ docker stop dropvault-authentification_app 1446 docker stop 
+ 0c7d9733e104 1447 docker stop f875b30585de 1448 docker ps 1449 docker 
+ ps -a 1450 docker rm $(docker ps -a -q) 1451 docker images 1452 docker 
+ system prune -a 1453 docker build -t mystorage . 1454 docker ps 1455 
+ docker images 1456 docker system prune -a$ 1457 docker system prune -a 
+ 1458 docker build -t mystorage . 1459 docker ps 1460 docker ps -a 1461 
+ docker images 1462 docker run --name dropvault-upload -d -p 8084:8084 
+ mystorage 1463 docker 1464 docker system prune -a 1465 docker 1466 
+ docker ps 1467 docker build -t mystorage . 1468 ls 1469 docker images 
+ 1470 docker build -t mystorage . 1471 DOCKER 1472 docker ps 1473 docker 
+ ps -iamges 1474 docker ps -images 1475 docker ps images 1476 docker 
+ images 1477 docker system prune -a 1478 docker ps 1479 docker build -t 
+ mystorage . 1480 docker images 1481 docker system prune -a 1482 docker 
+ build -t mystorage . 1483 docker images 1484 docker run --name drop -d 
+ -p 8084:8084 mystorage 1485 docker images 1486 ls 1487 docker system 
+ prune -a 1488 cargo install diesel_cli --no-default-features --features 
+ postgres 1489 sudo -i -u postgre 1490 sudo -i -u postgres 1491 sudo -i 
+ -u username 1492 sudo -i -u alexis 1493 sudo -i -u postgres$ 1494 sudo 
+ -i -u postgres 1495 sudo -u postgres psql -c "ALTER USER postgres 
+ PASSWORD 'password';" 1496 sudo -i -u postgres 1497 sudo -i -u postgres 
+ 1498 sudo -u postgres -c "ALTER ROLE postgres WITH PASSWORD 'password'" 
+ 1499 sudo -i -u 1500 sudo -i -u postgres 1501 sudo -i -u alexis 1502 
+ cargo install diesel_cli --no-default-features --features postgres 1503 
+ sudo -i -u postgres 1504 sudo -i -u stockage 1505 sudo -i -u postgres$ 
+ 1506 sudo -i -u postgres 1507 psql -U stockage -h localhost db_stockage 
+ 1508 sudo apt get install libpq-dev 1509 sudo apt-get install libpq-dev 
+ 1510 nano /etc/postgresql/12/main/postgresql.conf 1511 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1512 psql -U stockage -h 
+ localhost db_stockage 1513 sudo service postgresql stop 1514 sudo 
+ service postgresql start 1515 psql -U stockage -h localhost db_stockage 
+ 1516 cargo install diesel_cli --no-default-features --features postgres 
+ 1517 psql -U stockage -h localhost db_stockage 1518 sudo apt install 
+ libpq-dev 1519 sudo apt autoremove 1520 sudo apt install libpq-dev 1521 
+ cargo install diesel_cli --no-default-features --features stockage 1522 
+ cargo install diesel_cli --no-default-features --features postgres 1523 
+ psql -U postgres -h localhost db_stock 1524 cargo install diesel_cli 
+ --no-default-features --features postgres 1525 brew 1526 /bin/bash -c 
+ "$(curl -fsSL 
+ https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)" 
+ 1527 cd /home/linuxbrew/ 1528 ls 1529 ls -a 1530 cat .linuxbrew/ 1531 
+ sudo rm -rf /home/linuxbrew 1532 ls 1533 ls -la 1534 ls -a 1535 cargo 
+ install diesel_cli --no-default-features --features postgres 1536 cd 
+ /home/ 1537 lq 1538 ls 1539 cd /home/linuxbrew 1540 cd alexis/ 1541 
+ nano .profile 1542 nano /home/alexis/.profile 1543 touch 
+ docker-compose.yml 1544 ping localhost:8084 1545 ping 127.0.0.1:8084 
+ 1546 cargo run 1547 docker-compose -f docker-compose.yml up 1548 
+ history 1549 sudo nano /etc/postgresql/12/main/postgresql.conf 1550 
+ sudo service postgresql stop 1551 sudo service postgresql start 1552 
+ docker-compose -f docker-compose.yml up 1553 docker images 1554 docker 
+ ps 1555 docker stop db_stock 1556 docker system prune -a 1557 docker ps 
+ 1558 cd /bin/ 1559 ls 1560 docker-compose -f docker-compose.yml up 1561 
+ docker ps 1562 docker ps -a 1563 docker ps 1564 docker ps -a 1565 
+ docker stop db_stock 1566 docke rps 1567 docker ps 1568 docker system 
+ prune -a 1569 docker ps 1570 docker ps -a 1571 docker images 1572 
+ docker-compose -f docker-compose.yml up 1573 docker stop db_stock 1574 
+ docker system prune -a 1575 docker-compose -f docker-compose.yml up 
+ 1576 docker-compose build 1577 docker-compose -f docker-compose.yml up 
+ 1578 docker stop db_stock 1579 docker system prune -a 1580 docker ps - 
+ 1581 docker ps -a 1582 docker-compose -f docker-compose.yml up 1583 
+ docker ps 1584 docker stop db_stock 1585 docker system prune -a 1586 
+ docker-compose -f docker-compose.yml up 1587 docker build -t 
+ docker-image-stockage stockage 1588 docker ps 1589 curl 
+ http://localhost:8084 1590 docker stop db_stock 1591 docker stop 
+ stockage_be 1592 docker system prune -a 1593 docker-compose -f 
+ docker-compose.yml up 1594 docker build -t docker-image-stockage . 1595 
+ docker images 1596 docker run docker-image-stockage 1597 docker ps 1598 
+ docker ps -a 1599 docker system prune -a 1600 docker images 1601 
+ docker-compose -f docker-compose.yml up 1602 docker ps -a 1603 curl 
+ http://localhost:8000 1604 netstat tulpn 1605 docker ps 1606 curl 
+ http://localhost:8000 1607 curl http://localhost:8084 1608 docker ps 
+ 1609 docker ps 1610 docker ps -a 1611 docker start stockage_be 1612 
+ docker ps -a 1613 docker-compose -f docker-compose.yml up 1614 docker 
+ ps 1615 docker ps -a 1616 docker system prune -a 1617 docker images 
+ 1618 docker ps -a 1619 docker-compose -f docker-compose.yml up 1620 
+ docker-compose up --build 1621 docker ps 1622 docker system prune -a 
+ 1623 git pull 1624 ng serve 1625 npm install --save-dev 
+ @angular-devkit/build-angular 1626 ls 1627 cd .. 1628 ls 1629 cd 
+ Dropvault 1630 cd Dropvaultv3/ 1631 ls 1632 git pull 1633 cargo run 
+ 1634 git pull 1635 ng serve 1636 cargo run 1637 cargo run 1638 ls 1639 
+ cd src/ 1640 ls 1641 wasm-pack build 1642 cargo run 1643 ls 1644 git 
+ clone https://github.com/romainlom1843/Dropvaultv3.git 1645 cargo run 
+ 1646 sudo nano /etc/postgresql/12/main/postgresql.conf 1647 stop 
+ postgresql 1648 systemctl stop postgresql 1649 systemctl start 
+ postgresql 1650 cargo run 1651 ls 1652 ls -a 1653 nano .env 1654 diesel 
+ setup 1655 cargo run, 1656 cargo run 1657 cargo run 1658 sudo -i -u 
+ postgres 1659 ls -la 1660 nano .env 1661 cargo run 1662 cargo build 
+ 1663 diesel setup 1664 cargo build 1665 cargo run 1666 ng serve 1667 
+ docker run 1668 history 1669 history | grep docker 1670 docker ps 1671 
+ curl http://localhost:8084 1672 curl http://localhost:8084/ 1673 docker 
+ build -t mystorage . 1674 docker run --name drop -d -p 8084:8084 
+ mystorage 1675 docker ps 1676 docker ps -la 1677 docker start 
+ 2f9cdc206bdc 1678 docker ps 1679 docker ps -la 1680 docker system prune 
+ -a 1681 history | grep docker compose 1682 history | grep docker 1683 
+ docker-compose -f docker-compose.yml up 1684 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1685 history | grep postgres 
+ 1686 systemctl start postgresql 1687 diesel setup 1688 docker ps 1689 
+ docker ps -a 1690 diesel setup 1691 docker-compose -f 
+ docker-compose.yml up 1692 docker ps 1693 docker ps -la 1694 docker 
+ stop stockage_be 1695 docker system prune -a 1696 docker-compose -f 
+ docker-compose.yml up 1697 docker system prune -a 1698 history | grep 
+ docker 1699 docker-compose -f docker-compose.yml up 1700 docker system 
+ prune -a 1701 docker-compose -f docker-compose.yml up 1702 docker 
+ system prune -a 1703 docker ps -a 1704 docker-compose -f 
+ docker-compose.yml up 1705 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1706 history | get postgre 1707 
+ history | grep postgre 1708 ystemctl stop postgresql 1709 systemctl 
+ stop postgresql 1710 systemctl start postgresql 1711 docker-compose -f 
+ docker-compose.yml up 1712 docker system prune -a 1713 docker ps 1714 
+ docker ps -a 1715 docker-compose -f docker-compose.yml up 1716 history 
+ | grep postgre
+ 1717 sudo nano /etc/postgresql/12/main/postgresql.conf 1718 systemctl 
+ stop postgresql 1719 systemctl start postgresql 1720 git pull 1721 
+ touch Dockerfilz 1722 touch Dockerfile 1723 cargo run 1724 hsitory 1725 
+ hiqtory 1726 history 1727 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1728 systemctl stop postgresql 
+ 1729 systemctl start postgresql 1730 cargo build 1731 cargo run 1732 
+ docker build -t docker-image-auth . 1733 docker images 1734 docker run 
+ --name dropvault-auth -d -p 8080:8080 docker-image-auth 1735 docker ps 
+ 1736 docker ps -a 1737 docker system prune - 1738 docker system prune 
+ -a 1739 docker build -t docker-image-auth . 1740 docker run 
+ docker-image-auth 1741 docker run --name dropvault-auth -d -p 8080:8080 
+ docker-image-auth 1742 docker ps 1743 docker ps -a 1744 history 1745 
+ history | grep build 1746 docker build -t mystorage . 1747 docker build 
+ -t myapp . 1748 docker ps 1749 docker ps -a 1750 docker stop 
+ stockage_db_1 1751 docker system prune -a 1752 docker build -t myapp . 
+ 1753 ls 1754 docker ps 1755 docker ps -a 1756 cargo run 1757 ls 1758 cd 
+ /home/alexis/ 1759 ls 1760 cd Documents/ 1761 ls 1762 history 1763 
+ docker-compose -f docker-compose.yml up 1764 docker system prune -a 
+ 1765 docle 1766 docker-compose -f docker-compose.yml up 1767 history | 
+ grep nano 1768 hsitory 1769 history | grep postgre 1770 ystemctl start 
+ postgresql 1771 systemctl start postgresql 1772 docker-compose -f 
+ docker-compose.yml up 1773 cargo build 1774 docker ps 1775 docker 
+ system prune -a 1776 docker-compose -f docker-compose.yml up 1777 
+ docker system prune -a 1778 docker ps 1779 docker-compose -f 
+ docker-compose.yml up 1780 docker system prune -a 1781 docker-compose 
+ -f docker-compose.yml up 1782 docker system prune -a 1783 
+ docker-compose -f docker-compose.yml up 1784 docker system prune -a 
+ 1785 docker ps -a 1786 docker-compose -f docker-compose.yml up 1787 
+ docker system prune -a 1788 docker-compose -f docker-compose.yml up 
+ 1789 docker system prune -a 1790 docker-compose -f docker-compose.yml 
+ up 1791 docker build -t docker-image-auth . 1792 docker-compose -f 
+ docker-compose.yml up 1793 docker ps -a 1794 docker system prune 1795 
+ docker ps -a 1796 docker images 1797 docker ps 1798 curl -v -H 
+ "Content-Type: application/json" -X POST -d '{"username": "michel", 
+ "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ 127.0.0.1:8080/signup 1799 docker-compose -f docker-compose.yml up 1800 
+ docker-compose -f docker-compose.local.yml up 1801 docker 1802 docker 
+ system prune -a 1803 docker ps -a 1804 docker ps -a 1805 cargo run 1806 
+ docker-compose -f docker-compose.yml up 1807 docker ps 1808 docker ps 
+ -a 1809 docker system prune -a 1810 docker ps -a 1811 docker system 
+ prune -a 1812 docker ps -a 1813 docker-compose -f docker-compose.yml up 
+ 1814 docker system prune -a 1815 docker-compose -f docker-compose.yml 
+ up 1816 docker-compose up --build 1817 docker compose system prune -a 
+ 1818 docker system prune -a 1819 docker-compose -f docker-compose.yml 
+ up 1820 docker system prune -a 1821 docker-compose -f 
+ docker-compose.yml up 1822 docker system prune -a 1823 docker-compose 
+ -f docker-compose.yml up 1824 docker system prune -a 1825 
+ docker-compose -f docker-compose.yml up 1826 docker ps 1827 docker 
+ system prune -a 1828 docker-compose -f docker-compose.yml up 1829 
+ docker system prune -a 1830 docker-compose -f docker-compose.yml up 
+ 1831 docker system prune -a 1832 docker ps 1833 curl -v -H 
+ "Content-Type: application/json" -X POST -d '{"username": "michel", 
+ "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ 127.0.0.1:8080/signup 1834 docker logs db 1835 docker ps -a 1836 docker 
+ exec 1837 docker exec -it db 1838 docker exec -it db sh 1839 cargo run 
+ 1840 docker ps 1841 docker exec -it auth_be 1842 docker exec -it 
+ auth_be sh 1843 curl -v -H "Content-Type: application/json" -X POST -d 
+ '{"username": "michel", "email": "michel.drucker@gmail.fr", "passwd": 
+ "mich2310"}' 127.0.0.1:8080/signup 1844 curl -v -H "Content-Type: 
+ application/json" -X POST -d '{"username": "michel", "passwd": 
+ "mich2310"}' 127.0.0.1:8080/login 1845 docker exec -it db sh 1846 curl 
+ -v -H "Content-Type: application/json" -X POST -d '{"username": 
+ "michel", "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ localhost:8080/signup 1847 cargo build 1848 history | get nano 1849 
+ history | grep nano 1850 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1851 systemctl postgres stop 
+ 1852 postgres systemctl stop 1853 hitory | grep postgres 1854 history | 
+ grep postgres 1855 postgre ssystemctl stop 1856 postgres systemctl stop 
+ 1857 systemctl stop postgresql 1858 systemctl start postgresql 1859 
+ ./auth 1860 exit 1861 docker system prune -a 1862 docker ps -a 1863 
+ docker-compose -f docker-compose.yml up 1864 docker-compose up --build 
+ 1865 docker system prune -a 1866 docker-compose -f docker-compose.yml 
+ up 1867 docker system prune -a 1868 docker-compose -f 
+ docker-compose.yml up 1869 docker system prune -a 1870 docker-compose 
+ -f docker-compose.yml up 1871 docker system prune -a 1872 
+ docker-compose -f docker-compose.yml up 1873 docker-compose down 1874 
+ docker-compose up 1875 docker-compose down 1876 docker-compose up 1877 
+ docker-compose down 1878 docker-compose up 1879 docker-compose down 
+ 1880 docker-compose up 1881 docker ps -a 1882 docker system prune -a 
+ 1883 curl -v -H "Content-Type: application/json" -X POST -d 
+ '{"username": "michel", "email": "michel.drucker@gmail.fr", "passwd": 
+ "mich2310"}' 127.0.0.1:8080/signup 1884 curl -v -H "Content-Type: 
+ application/json" -X POST -d '{"username": "michel", "passwd": 
+ "mich2310"}' 127.0.0.1:8080/login 1885 cargo run 1886 ./auth 1887 ls 
+ 1888 ./auth 1889 sudo nano /etc/postgresql/12/main/postgresql.conf 1890 
+ history 1891 systemctl stop postgresql 1892 systemctl start postgresql 
+ 1893 curl -v -H "Content-Type: application/json" -X POST -d 
+ '{"username": "michel", "email": "michel.drucker@gmail.fr", "passwd": 
+ "mich2310"}' 127.0.0.1:8080/signup 1894 cargo build 1895 
+ APP_HOST=localhost 1896 APP_PORT=80 1897 APP_HOST 1898 docker build 
+ 1899 cargo build 1900 docker ps 1901 docker ps -a 1902 docker-compose 
+ up 1903 docker system prune -a 1904 docker-compose up 1905 docker 
+ system prune -a 1906 docker-compose -f docker-compose.yml up 1907 
+ docker system prune -a 1908 cargo build 1909 curl -v -H "Content-Type: 
+ application/json" -X POST -d '{"username": "michel", "email": 
+ "michel.drucker@gmail.fr", "passwd": "mich2310"}' 127.0.0.1:8080/signup 
+ 1910 curl -v -H "Content-Type: application/json" -X POST -d 
+ '{"username": "michel", "email": "michel.drucker@gmail.fr", "passwd": 
+ "mich2310"}' 127.0.0.1:8000/signup 1911 docker ps 1912 curl -v -H 
+ "Content-Type: application/json" -X POST -d '{"username": "michel", 
+ "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ 127.0.0.1:8080/signup 1913 touch Dockerfile.diesel 1914 diesel setup 
+ 1915 diesel migration run 1916 docker-compose -f docker-compose.yml up 
+ 1917 docker system prune -a 1918 docker-compose -f docker-compose.yml 
+ up 1919 docker system prune -a 1920 docker-compose -f 
+ docker-compose.yml up 1921 diesel set up 1922 diesel setup 1923 docker 
+ ps 1924 curl http://localhost:8080 1925 curl http://localhost:8080/ 
+ 1926 curl http://localhost:808/ 1927 curl http://localhost:8080/ 1928 
+ curl -v -H "Content-Type: application/json" -X POST -d '{"username": 
+ "michel", "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ 127.0.0.1:8080/signup 1929 diesel migration 1930 diesel migration run 
+ 1931 docker ps -a 1932 curl -v -H "Content-Type: application/json" -X 
+ POST -d '{"username": "michel", "email": "michel.drucker@gmail.fr", 
+ "passwd": "mich2310"}' 127.0.0.1:8080/signup 1933 ls 1934 docker system 
+ prune -a 1935 docker-compose -f docker-compose.yml 1936 docker-compose 
+ -f docker-compose.yml up 1937 docker system prune -a 1938 
+ docker-compose -f docker-compose.yml up 1939 docker system prune -a 
+ 1940 docker-compose -f docker-compose.yml up 1941 docker system prune 
+ -a 1942 docker-compose -f docker-compose.yml up 1943 curl -v -H 
+ "Content-Type: application/json" -X POST -d '{"username": "michel", 
+ "email": "michel.drucker@gmail.fr", "passwd": "mich2310"}' 
+ 127.0.0.1:8080/signup 1944 docker ps 1945 curl -v -H "Content-Type: 
+ application/json" -X POST -d '{"username": "michel", "email": 
+ "michel.drucker@gmail.fr", "passwd": "mich2310"}' 127.0.0.1:8080/signup 
+ 1946 docker ps 1947 docker comm 1948 docker-compose -f 
+ docker-compose.yml up 1949 touch Dockerfile.base 1950 docker ps 1951 
+ docker stop auth_be 1952 docker stop db_auth 1953 docker system prune 
+ -a 1954 docker-compose -f docker-compose.yml up 1955 docker system 
+ prune -a 1956 docker-compose -f docker-compose.yml up 1957 docker ps -a 
+ 1958 docker system prune -a 1959 ls 1960 docker ps -a 1961 
+ docker-compose -f docker-compose.yml up 1962 docker system prune -a 
+ 1963 docker-compose -f docker-compose.yml up 1964 docker system prune 
+ -a 1965 docker-compose -f docker-compose.yml up 1966 docker system 
+ prune -a 1967 docker-compose -f docker-compose.yml up 1968 diesel setup 
+ 1969 history | grep nano 1970 sudo nano 
+ /etc/postgresql/12/main/postgresql.conf 1971 service postgresql stop 
+ 1972 service postgresql start 1973 diesel setup 1974 service postgresql 
+ stop 1975 docker-compose -f docker-compose.yml up 1976 nano 
+ /etc/postgresql/12/main/postgresql.conf 1977 service postgresql stop 
+ 1978 docker-compose -f docker-compose.yml up* 1979 docker-compose -f 
+ docker-compose.yml up 1980 docker ps 1981 docker ps -a 1982 docker 
+ system prune -a 1983 docker-compose -f docker-compose.yml up 1984 
+ docker system prune -a 1985 docker-compose -f docker-compose.yml up 
+ 1986 docker system prune -a 1987 docker-compose -f docker-compose.yml 
+ up 1988 docker system prune -a 1989 docker-compose -f 
+ docker-compose.yml up 1990 docker system prune -a 1991 docker run 
+ Dockerfile.base 1992 docker system prune -a 1993 docker ps 1994 service 
+ postgresql status 1995 docker ps 1996 docker ps -a 1997 docker system 
+ prune -a 1998 docker-compose -f docker-compose.yml up 1999 history 2000 
+ history | nano
