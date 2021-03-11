@@ -1,7 +1,7 @@
  
  
  Upload
- curl -v -H "Content-Type: application/json" -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Iko0eUFzMlgiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJyb21haW5sbCIsImNvbXBhbnkiOiJEcm9wVmF1bHQiLCJleHAiOjE2MTQyNDE3MDV9.X2DbCFxTD-37S5wmUAXHgCNsiSTYiRIKMX27Bd4durs' -X POST -d '{"filename": "file.txt", "content": "bar1", "username": "michel"}' 127.0.0.1:8084/files
+ curl -v -H "Content-Type: application/json" -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Im1vMjhPYXAiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJyb21haW5sIiwiY29tcGFueSI6IkRyb3BWYXVsdCIsImV4cCI6MTYxNDc4Njg4OH0.jOKHlRAsvOeQkYh6LbSxT8Z1CahNJyRVWqQJs-hAj70' -X POST -d '{"filename": "file.txt", "username": "michel", "sizing": "15", "extension": "image/"}' 127.0.0.1:8084/files
  
  get files
  curl -X GET http://localhost:8084/files/michel
