@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-auth
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: db-auth
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-auth
+  template:
+    metadata:
+      labels:
+        app: db-auth
+    spec:
+      containers:
+      - name: db-auth
+        image: docker.io/postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: db-auth
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dropvault-auth
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 31003
+    protocol: TCP
+  selector:
+    app: dropvault-auth
+    
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dropvault-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dropvault-auth
+  template:
+    metadata:
+      labels:
+        app: dropvault-auth
+    spec:
+      containers:
+      - name: dropvault-auth
+        image: docker.io/dropvault/dropvault-auth-arm:v0.1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@db/postgres?sslmode=disable
+      restartPolicy: Always
+          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dropvault-tools-auth
+  namespace: dropvault
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: dropvault-tools-auth
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dropvault-tools-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dropvault-tools-auth
+  template:
+    metadata:
+      labels:
+        app: dropvault-tools-auth
+    spec:
+      containers:
+      - name: dropvault-auth
+        image: docker.io/dropvault/auth-tool:v1
+        env:
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@db/postgres?sslmode=disable
+      restartPolicy: Always
+
