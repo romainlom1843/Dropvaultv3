@@ -1,5 +1,5 @@
 #!/bin/sh
 sleep 5
-cp /tmp/Cargo-tools/Cargo.toml /tmp/Cargo.toml
+ls -l
 diesel setup
 diesel migration run

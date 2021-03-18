@@ -1,9 +1,0 @@
-WORKDIR app
-COPY . .
-RUN diesel setup
-RUN diesel migration run
-RUN /etc/init.d/postgresql start
-
-
-    - migrations:/tmp/migrations
-    - Cargo.toml:/tmp/Cargo.toml

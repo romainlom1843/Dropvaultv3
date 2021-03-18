@@ -13,6 +13,8 @@ RUN cargo install diesel_cli
 
 WORKDIR /tmp
 
+COPY Cargo.toml .
+COPY migrations/ ./migrations/ 
 COPY migrate.sh .
 RUN chmod +x migrate.sh
 ENTRYPOINT ["./migrate.sh"]
