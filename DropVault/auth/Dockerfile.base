@@ -1,7 +1,7 @@
 FROM postgres:9.6
 
 
-RUN apt-get update && apt-get -y install curl && apt-get -y install build-essential && apt-get install -q -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 postgresql-client-common postgresql-common && apt-get install -y libpq-dev libsqlite3-dev default-libmysqlclient-dev
+RUN apt-get update && apt-get -y install curl && apt-get -y install build-essential && apt-get install -q -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 postgresql-client-common postgresql-common && apt-get remove -y libpq5 && apt-get install -y libpq-dev libsqlite3-dev default-libmysqlclient-dev
 
 
 #install rust

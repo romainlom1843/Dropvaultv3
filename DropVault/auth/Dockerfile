@@ -13,7 +13,7 @@ COPY ./src ./src
 COPY ./migrations ./migrations
 COPY ./diesel.toml .
 
-RUN touch .env; 
+RUN touch .env;
 
 # rebuild app with project source
 RUN cargo build
@@ -29,7 +29,7 @@ WORKDIR /app
 RUN apt-get update; \
     apt-get install --no-install-recommends -y libpq5 libsqlite3-0; \
     rm -rf /var/lib/apt/lists/*
-    
+
 # copy binary and configuration files
 COPY --from=build /app/target/debug/auth .
 COPY --from=build /app/.env .
@@ -42,4 +42,5 @@ EXPOSE 8080
 RUN chmod +x wait-for-it.sh
 
 # run the binary
-CMD ["./wait-for-it.sh", "db:5432", "--", "/app/auth"]
+CMD ["./wait-for-it.sh", "db-auth:5432", "--", "/app/auth"]
+
