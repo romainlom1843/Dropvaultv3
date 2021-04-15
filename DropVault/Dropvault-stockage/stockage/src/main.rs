@@ -73,7 +73,7 @@ async fn main() -> std::io::Result<()> {
             	.route("/echange",web::post().to(files::echange))
             	.route("/remove/{id}", web::delete().to(files::remove_content))
     })
-    .bind("127.0.0.1:8084")?
+    .bind("0.0.0.0:8084")?
     .run()
     .await
 }
