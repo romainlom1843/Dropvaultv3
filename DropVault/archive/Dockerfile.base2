@@ -1,0 +1,25 @@
+FROM ubuntu:18.04
+
+FROM postgres:9.6
+
+
+RUN apt-get update && apt-get -y install curl && apt-get -y install build-essential && apt-get install -q -y postgresql-9.6 postgresql-client-9.6 postgresql-contrib-9.6 postgresql-client-common postgresql-common && apt-get install -y libpq-dev libsqlite3-dev default-libmysqlclient-dev
+
+RUN echo postgres:postgres | chpasswd 
+
+#install rust
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+#Installation diesel cli
+RUN cargo install diesel_cli 
+
+RUN /etc/init.d/postgresql start
+WORKDIR app
+COPY . .
+RUN diesel setup
+RUN diesel migration run
+
+# expose port
+EXPOSE 5432
+

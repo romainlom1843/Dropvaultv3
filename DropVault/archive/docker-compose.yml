@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    container_name: db_auth
+    image: postgres
+    restart: always
+    ports:
+    - "5432:5432"
+    environment:
+    - POSTGRES_PASSWORD=postgres
+    volumes: 
+    - pgdata:/var/lib/postgresql/data
+  app:
+    container_name: auth_be
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+    - "8080:8080"
+    environment:
+    - APP_HOST=0.0.0.0
+    - APP_PORT=8080
+    - DATABASE_URL=postgres://postgres:postgres@db/postgres?sslmode=disable
+    depends_on:
+    - db
+volumes:
+  pgdata:

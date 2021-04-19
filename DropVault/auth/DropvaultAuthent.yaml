@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-auth
+  namespace: dropvault
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: db-auth
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-auth
+  namespace: dropvault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-auth
+  template:
+    metadata:
+      labels:
+        app: db-auth
+    spec:
+      containers:
+      - name: db-auth
+        image: docker.io/postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        volumeMounts:
+         - name: volume-dropvault-auth-db
+           mountPath: "/var/lib/postgresql/data"
+      volumes:
+      - name: volume-dropvault-auth-db
+        persistentVolumeClaim:
+          claimName: pvc-dropvault-auth-db
+          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dropvault-auth
+  namespace: dropvault
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 31003
+    protocol: TCP
+  selector:
+    app: dropvault-auth
+    
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dropvault-auth
+  namespace: dropvault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dropvault-auth
+  template:
+    metadata:
+      labels:
+        app: dropvault-auth
+    spec:
+      containers:
+      - name: dropvault-auth
+        image: docker.io/dropvault/dropvault-auth-arm:v0.3
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@db-auth:5432/postgres?sslmode=disable
+        - name: DB
+          value: "db-auth:5432"
+      restartPolicy: Always
+          
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dropvault-tools-auth
+  namespace: dropvault
+spec:
+  containers:
+  - name: dropvault-auth
+    image: docker.io/dropvault/auth-tool:v4
+    env:
+    - name: DATABASE_URL
+      value: postgres://postgres:postgres@db-auth:5432/postgres?sslmode=disable
+  restartPolicy: Never
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-dropvault-auth-db
+  namespace: dropvault
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "pgdata"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-dropvault-auth-db
+  namespace: dropvault
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+

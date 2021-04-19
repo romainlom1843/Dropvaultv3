@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-stock
+  namespace: dropvault
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: db-stock
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-stock
+  namespace: dropvault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-stock
+  template:
+    metadata:
+      labels:
+        app: db-stock
+    spec:
+      containers:
+      - name: db-stock
+        image: docker.io/postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        volumeMounts:
+         - name: volume-dropvault-stock-db
+           mountPath: "/var/lib/postgresql/data"
+      volumes:
+      - name: volume-dropvault-stock-db
+        persistentVolumeClaim:
+          claimName: pvc-dropvault-stock-db
+          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dropvault-stock
+  namespace: dropvault
+spec:
+  type: NodePort
+  ports:
+  - port: 8084
+    targetPort: 8084
+    nodePort: 31000
+    protocol: TCP
+  selector:
+    app: dropvault-stock
+    
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dropvault-stock
+  namespace: dropvault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dropvault-stock
+  template:
+    metadata:
+      labels:
+        app: dropvault-stock
+    spec:
+      containers:
+      - name: dropvault-stock
+        image: docker.io/dropvault/dropvault-storage-arm:v2
+        ports:
+        - containerPort: 8084
+        env:
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@db-stock/postgres?sslmode=disable
+        - name: DB
+          value: "db-stock:5432"
+      restartPolicy: Always
+          
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dropvault-tools-stock
+  namespace: dropvault
+spec:
+  containers:
+  - name: dropvault-stock
+    image: docker.io/dropvault/dropvault-storage-tools:v1
+    env:
+    - name: DATABASE_URL
+      value: postgres://postgres:postgres@db-stock/postgres?sslmode=disable
+  restartPolicy: Never
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-dropvault-stock-db
+  namespace: dropvault
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "pgdata"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-dropvault-stock-db
+  namespace: dropvault
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
