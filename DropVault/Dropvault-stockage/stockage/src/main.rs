@@ -23,7 +23,7 @@ use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 
-async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
+/*async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
     let config = req
         .app_data::<Config>()
         .map(|data| data.get_ref().clone())
@@ -38,12 +38,12 @@ async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<Servi
         }
         Err(_) => Err(AuthenticationError::from(config).into()),
     }
-}
+}*/
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
 
- 	dotenv::dotenv().ok();
+    dotenv::dotenv().ok();
     std::env::set_var("RUST_LOG", "actix_web=debug");
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     
@@ -55,11 +55,11 @@ async fn main() -> std::io::Result<()> {
         
     HttpServer::new(move || {
      
-  let auth = HttpAuthentication::bearer(validator);
+  //let auth = HttpAuthentication::bearer(validator);
  
      
         App::new()
-       	.wrap(auth)
+       	//.wrap(auth)
         	.data(pool.clone())
         	.route("/file/{user_name}/{file_name}", web::get().to(files::get_file_id))
             	.route("/files/{username}", web::get().to(files::get_files))
@@ -67,7 +67,7 @@ async fn main() -> std::io::Result<()> {
             	.route("/type/{username}", web::get().to(files::get_type))
             	.route("/download/{id}", web::get().to(files::download))
             	.route("/files", web::post().to(files::upload))
-            	.route("/upload", web::post().to(files::upl_content))
+            	.route("/upload/{id}", web::post().to(files::upl_content))
             	.route("/dwl/{id}", web::get().to(files::dwl_content))
             	.route("/files/{id}", web::delete().to(files::delete_file))
             	.route("/echange",web::post().to(files::echange))

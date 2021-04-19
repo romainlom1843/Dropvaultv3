@@ -20,9 +20,9 @@ pub struct InputFile {
     pub ext: String,
 }
 #[derive(Debug, Serialize, Deserialize)]
-pub struct InputContent{
-	pub content : String,
-	pub id_c : i32,
+pub struct FormData{
+	pub content : String,	
+	pub key : String,
 }
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FileInfo{
@@ -98,16 +98,29 @@ if id_file.is_ok() == false
     }
    
 }
-pub async fn upl_content(item:web::Json<InputContent>)-> impl Responder{
+pub async fn upl_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> impl Responder{
 
+	
 	let path = "../stock/";
-	let file_name= path.to_owned() + &item.id_c.to_string();
+	let path2= "../key/";
+	let file_name= path.to_owned() + &id_c.to_string();
+	let file_name2= path2.to_owned() + &id_c.to_string();
+	//let mut file1 = std::fs::File::open(&file_name);
+	
+	//if file1.is_ok(){
+		//let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
+		//file2.write_all(&item.content.as_bytes()).expect("Don't write");
+		
+	//}
+	//else{
 	let mut file = std::fs::File::create(&file_name).expect("file created");
 	file.write_all(&item.content.as_bytes()).expect("Don't write");
-	HttpResponse::Ok().body("Rsponse")
+	let mut file2 = std::fs::File::create(&file_name2).expect("file created");
+	file2.write_all(&item.key.as_bytes()).expect("Don't write");
+		
+	//}
+	HttpResponse::Ok().body("Response")
 }
-
-
 
 
 // Download = get un fichier par id
@@ -143,6 +156,8 @@ pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 }
 
 
+
+// Récupération des données
 //Recuperer tous les noms par username
 pub async fn get_files(db: web::Data<Pool>, file_username: web::Path<String>) -> Result<HttpResponse, Error> {
 
@@ -224,8 +239,6 @@ pub async fn remove_content(file_id: web::Path<i32>)-> impl Responder{
 
 
 
-
-
 // Echange file
 pub async fn echange(  db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<HttpResponse, Error>{
 	
@@ -237,9 +250,7 @@ pub async fn echange(  db: web::Data<Pool>, item: web::Json<InputFile>) -> Resul
 fn echange_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, diesel::result::Error> {
     let conn = db.get().expect("pool database");
     let id_file = files.select(id).filter(filename.eq(&item.filename)).filter(username.eq(&item.username)).get_result::<i32>(&conn);
-   
-   
-    
+
 if id_file.is_ok() == false
   {
     let new_file = NewFile {
