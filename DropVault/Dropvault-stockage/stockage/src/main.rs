@@ -69,6 +69,7 @@ async fn main() -> std::io::Result<()> {
             	.route("/files", web::post().to(files::upload))
             	.route("/upload/{id}", web::post().to(files::upl_content))
             	.route("/dwl/{id}", web::get().to(files::dwl_content))
+            	.route("/key/{id}", web::get().to(files::dwl_key))
             	.route("/files/{id}", web::delete().to(files::delete_file))
             	.route("/echange",web::post().to(files::echange))
             	.route("/remove/{id}", web::delete().to(files::remove_content))

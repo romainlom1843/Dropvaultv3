@@ -19,6 +19,12 @@ use chrono::prelude::*;
 use jwt::{encode, Header, Algorithm};
 use rand::{distributions::Alphanumeric, Rng};
 
+use pbkdf2::{
+    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
+    Pbkdf2
+};
+use rand_core::OsRng;
+
 #[derive(Debug, RustcEncodable, RustcDecodable)]
 struct Claims {
     sub: String,
@@ -37,6 +43,10 @@ pub struct InputSignUp {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputLogin {
     pub username: String,
+    pub passwd: String,
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PassLog {
     pub passwd: String,
 }
 
@@ -109,6 +119,7 @@ fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Resu
 		header.kid = Some(s.to_owned());
 		header.alg = Algorithm::HS256;
 		let token = encode(header, &my_claims, "mon_secret".as_ref()).expect("token created");
+	
     	Ok(token)
     }
 else{
@@ -117,7 +128,25 @@ else{
     }  
 }
 
+// Key derivation 
 
+pub async fn derive_passwd(item: web::Json<PassLog>) -> HttpResponse {
+
+
+  	let password = item.passwd.as_bytes();
+	let salt = SaltString::generate(&mut OsRng);
+	
+	// Hash password to PHC string ($pbkdf2-sha256$...)
+	let password_hash = Pbkdf2.hash_password_simple(password, salt.as_ref()).expect("derivation").to_string();
+	println!("{}", password_hash);
+	
+	// Verify password against PHC string
+	let parsed_hash = PasswordHash::new(&password_hash).expect("hash verified");
+	println!("{}", parsed_hash);
+	HttpResponse::Ok().json(password_hash)
+}
+
+	
 
 //Delete
 pub async fn delete_user(db: web::Data<Pool>,user_id: web::Path<i32>) -> Result<HttpResponse, Error> {

@@ -32,6 +32,7 @@ async fn main() -> std::io::Result<()> {
             .route("/login", web::post().to(handlers::get_user))
             .route("/signup", web::post().to(handlers::add_user))
             .route("/users/{id}", web::delete().to(handlers::delete_user))
+            .route("/passwd", web::post().to(handlers::derive_passwd))
     })
     .bind("0.0.0.0:8080")?
     .run()

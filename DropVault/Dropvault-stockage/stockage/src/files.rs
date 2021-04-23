@@ -145,7 +145,7 @@ fn db_download(pool: web::Data<Pool>, file_id: i32) -> Result<File, diesel::resu
 }
 pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 
-	let path = "../stock/";
+	let path = "../stock/";	
 	let file_name= path.to_owned() + &file_id.to_string();
 	let mut file = std::fs::File::open(&file_name).expect("file don't load");
 	/*let metadata= std::fs::metadata(&file_name).expect("unable to read metadata");
@@ -155,6 +155,16 @@ pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 	HttpResponse::Ok().body(contents)
 }
 
+pub async fn dwl_key(file_id: web::Path<i32>) -> impl Responder{
+	
+	
+	let path2 = "../key/";
+	let file_name2=path2.to_owned() + &file_id.to_string();
+	let mut file2 = std::fs::File::open(&file_name2).expect("file don't load");
+	let mut contents2= String::new();
+	file2.read_to_string(&mut contents2).expect("File read");
+	HttpResponse::Ok().body(contents2)
+}
 
 
 // Récupération des données
