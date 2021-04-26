@@ -279,4 +279,27 @@ if id_file.is_ok() == false
     }
    
 }
+pub async fn exchange_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> impl Responder{
+
+	
+	let path = "../stock/";
+	let path2= "../key/";
+	let file_name= path.to_owned() + &id_c.to_string();
+	let file_name2= path2.to_owned() + &id_c.to_string();
+	//let mut file1 = std::fs::File::open(&file_name);
+	
+	//if file1.is_ok(){
+		//let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
+		//file2.write_all(&item.content.as_bytes()).expect("Don't write");
+		
+	//}
+	//else{
+	let mut file = std::fs::File::create(&file_name).expect("file created");
+	file.write_all(&item.content.as_bytes()).expect("Don't write");
+	let mut file2 = std::fs::File::create(&file_name2).expect("file created");
+	file2.write_all(&item.key.as_bytes()).expect("Don't write");
+		
+	//}
+	HttpResponse::Ok().body("Response")
+}
 
