@@ -20,7 +20,7 @@ metadata:
   name: db-auth
   namespace: dropvault
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: db-auth
@@ -70,7 +70,7 @@ metadata:
   name: dropvault-auth
   namespace: dropvault
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: dropvault-auth
@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
       - name: dropvault-auth
-        image: docker.io/dropvault/dropvault-auth-arm:v0.3
+        image: docker.io/dropvault/dropvault-auth-arm:v0.4
         ports:
         - containerPort: 8080
         env:
@@ -91,22 +91,6 @@ spec:
           value: "db-auth:5432"
       restartPolicy: Always
           
----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: dropvault-tools-auth
-  namespace: dropvault
-spec:
-  containers:
-  - name: dropvault-auth
-    image: docker.io/dropvault/auth-tool:v4
-    env:
-    - name: DATABASE_URL
-      value: postgres://postgres:postgres@db-auth:5432/postgres?sslmode=disable
-  restartPolicy: Never
-
 ---
 
 kind: PersistentVolume
@@ -121,9 +105,10 @@ spec:
   capacity:
     storage: 500Mi
   accessModes:
-  - ReadWriteOnce
-  hostPath:
-    path: "pgdata"
+  - ReadWriteMany
+  nfs:
+    server: 192.168.1.20
+    path: "/media/datacluster/pgdata-auth-db/"
 
 ---
 
@@ -135,8 +120,8 @@ metadata:
 spec:
   storageClassName: manual
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 500Mi
+      storage: 100Mi
 
