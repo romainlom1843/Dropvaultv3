@@ -1,4 +1,4 @@
-# build stage
+### build stage ###
 FROM rust:slim as build
 
 # install libpq, libsqlite and create new empty binary project
@@ -15,36 +15,15 @@ COPY ./diesel.toml .
 
 RUN touch .env;
 
-#On installe openssl
-#RUN apt-get install wget -y
-RUN apt install pkg-config -y
-RUN apt-get update -y
-RUN apt install libssl-dev -y
-
-#WORKDIR /tmp
-
-#RUN wget https://www.openssl.org/source/openssl-1.0.1t.tar.gz
-#RUN tar xzf openssl-1.0.1t.tar.gz
-#RUN export MACHINE=armv7
-#RUN export ARCH=arm
-#RUN export CC=arm-linux-gnueabihf-gcc
-#RUN cd openssl-1.0.1t && ./config shared && make && cd -
-#RUN export OPENSSL_LIB_DIR=/tmp/openssl-1.0.1t/
-#RUN export OPENSSL_INCLUDE_DIR=/tmp/openssl-1.0.1t/include
-
 # rebuild app with project source
 RUN cargo build
 
-# deploy stage
+#### deploy stage ###
 FROM debian:buster-slim
 
 # create app directory
 RUN mkdir app
-RUN mkdir /app/stockms
-RUN mkdir /app/stock
-RUN mkdir /app/key
-
-WORKDIR /app/stockms
+WORKDIR /app
 
 # install libpq and libsqlite
 RUN apt-get update; \
@@ -52,16 +31,42 @@ RUN apt-get update; \
     rm -rf /var/lib/apt/lists/*
 
 # copy binary and configuration files
-COPY --from=build /app/target/debug/stockage .
+COPY --from=build /app/target/debug/auth .
 COPY --from=build /app/.env .
 COPY --from=build /app/diesel.toml .
 COPY ./wait-for-it.sh .
 
 # expose port
-EXPOSE 8084
+EXPOSE 8080
 
 RUN chmod +x wait-for-it.sh
 
-# run the binary
-CMD ["./wait-for-it.sh", "db-stock:5432", "--", "/app/stockms/stockage"]
+## Faire les migrations
+#Installation diesel cli
+RUN apt-get update -y && apt install curl -y
 
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN apt install postgresql -y
+RUN apt install libpq-dev -y
+
+RUN apt install gcc -y
+#ENV MACHINE=armv7
+#ENV ARCH=arm
+#ENV CC=arm-linux-gnueabihf-gcc
+
+RUN cargo install diesel_cli
+
+WORKDIR /tmp
+
+COPY Cargo.toml .
+COPY migrations/ ./migrations/
+COPY migrate.sh .
+RUN chmod +x migrate.sh
+
+RUN ./migrate.sh
+
+# run the binary
+#CMD ["./wait-for-it.sh", "db-auth:5432", "--", "/app/auth"]
+CMD ["/app/auth"]

@@ -20,7 +20,7 @@ metadata:
   name: db-stock
   namespace: dropvault
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: db-stock
@@ -70,7 +70,7 @@ metadata:
   name: dropvault-stock
   namespace: dropvault
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: dropvault-stock
@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
       - name: dropvault-stock
-        image: docker.io/dropvault/dropvault-storage-arm:v2
+        image: docker.io/dropvault/dropvault-storage-arm:v2.2
         ports:
         - containerPort: 8084
         env:
@@ -89,23 +89,19 @@ spec:
           value: postgres://postgres:postgres@db-stock/postgres?sslmode=disable
         - name: DB
           value: "db-stock:5432"
+        volumeMounts:
+         - name: volume-dropvault-stock-content
+           mountPath: "/app/stock"
+         - name: volume-dropvault-stock-key
+           mountPath: "/app/key"
       restartPolicy: Always
-          
----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: dropvault-tools-stock
-  namespace: dropvault
-spec:
-  containers:
-  - name: dropvault-stock
-    image: docker.io/dropvault/dropvault-storage-tools:v1
-    env:
-    - name: DATABASE_URL
-      value: postgres://postgres:postgres@db-stock/postgres?sslmode=disable
-  restartPolicy: Never
+      volumes:
+      - name: volume-dropvault-stock-key
+        persistentVolumeClaim:
+          claimName: pvc-dropvault-stock-key
+      - name: volume-dropvault-stock-content
+        persistentVolumeClaim:
+          claimName: pvc-dropvault-stock-content
 
 ---
 
@@ -121,9 +117,10 @@ spec:
   capacity:
     storage: 500Mi
   accessModes:
-  - ReadWriteOnce
-  hostPath:
-    path: "pgdata"
+  - ReadWriteMany
+  nfs:
+    server: 192.168.1.20
+    path: "/media/datacluster/pgdata-stock-db"
 
 ---
 
@@ -135,7 +132,75 @@ metadata:
 spec:
   storageClassName: manual
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 500Mi
+      storage: 100Mi
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-dropvault-stock-content
+  namespace: dropvault
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 192.168.1.20
+    path: "/media/datacluster/stock-content"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-dropvault-stock-content
+  namespace: dropvault
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-dropvault-stock-key
+  namespace: dropvault
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 500Mi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 192.168.1.20
+    path: "/media/datacluster/stock-key"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-dropvault-stock-key
+  namespace: dropvault
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
