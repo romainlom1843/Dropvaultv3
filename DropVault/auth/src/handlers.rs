@@ -19,10 +19,7 @@ use chrono::prelude::*;
 use jwt::{encode, Header, Algorithm};
 use rand::{distributions::Alphanumeric, Rng};
 
-<<<<<<< HEAD
-=======
 
->>>>>>> eb1b6d522fafb8f62657e1e4e92f92f05bf59a9c
 use pbkdf2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
     Pbkdf2
@@ -123,19 +120,7 @@ fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Resu
 		header.kid = Some(s.to_owned());
 		header.alg = Algorithm::HS256;
 		let token = encode(header, &my_claims, "mon_secret".as_ref()).expect("token created");
-<<<<<<< HEAD
-	
-=======
 
-	let password = item.passwd.as_bytes();
-	let salt = SaltString::generate(&mut OsRng);
-
-	// Hash password to PHC string ($pbkdf2-sha256$...)
-	let password_hash = Pbkdf2.hash_password_simple(password, salt.as_ref()).unwrap().to_string();
-
-	// Verify password against PHC string
-	let parsed_hash = PasswordHash::new(&password_hash).unwrap();
->>>>>>> eb1b6d522fafb8f62657e1e4e92f92f05bf59a9c
     	Ok(token)
     }
 else{
@@ -154,11 +139,11 @@ pub async fn derive_passwd(item: web::Json<PassLog>) -> HttpResponse {
 	
 	// Hash password to PHC string ($pbkdf2-sha256$...)
 	let password_hash = Pbkdf2.hash_password_simple(password, salt.as_ref()).expect("derivation").to_string();
-	println!("{}", password_hash);
+	//println!("{}", password_hash);
 	
 	// Verify password against PHC string
 	let parsed_hash = PasswordHash::new(&password_hash).expect("hash verified");
-	println!("{}", parsed_hash);
+	//println!("{}", parsed_hash);
 	HttpResponse::Ok().json(password_hash)
 }
 

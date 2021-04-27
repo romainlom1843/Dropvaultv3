@@ -30,6 +30,11 @@ pub struct FileInfo{
 	pub file_name : String,
 	
 }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DownloadInfo{
+	pub file_id : i32,
+	pub iteration : i32,	
+}
 
 
 //Recuperer id d'un file
@@ -105,20 +110,20 @@ pub async fn upl_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> impl 
 	let path2= "../key/";
 	let file_name= path.to_owned() + &id_c.to_string();
 	let file_name2= path2.to_owned() + &id_c.to_string();
-	//let mut file1 = std::fs::File::open(&file_name);
+	let file1 = std::fs::File::open(&file_name);
 	
-	//if file1.is_ok(){
-		//let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
-		//file2.write_all(&item.content.as_bytes()).expect("Don't write");
+	if file1.is_ok(){
+		let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
+		file2.write_all(&item.content.as_bytes()).expect("Don't write");
 		
-	//}
-	//else{
+	}
+	else{
 	let mut file = std::fs::File::create(&file_name).expect("file created");
 	file.write_all(&item.content.as_bytes()).expect("Don't write");
-	let mut file2 = std::fs::File::create(&file_name2).expect("file created");
-	file2.write_all(&item.key.as_bytes()).expect("Don't write");
+	let mut file3 = std::fs::File::create(&file_name2).expect("file created");
+	file3.write_all(&item.key.as_bytes()).expect("Don't write");
 		
-	//}
+	}
 	HttpResponse::Ok().body("Response")
 }
 
@@ -143,16 +148,17 @@ fn db_download(pool: web::Data<Pool>, file_id: i32) -> Result<File, diesel::resu
    
     
 }
-pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
+pub async fn dwl_content(dl_info: web::Path<DownloadInfo>)-> impl Responder{
 
 	let path = "../stock/";	
-	let file_name= path.to_owned() + &file_id.to_string();
+	let file_name= path.to_owned() + &dl_info.file_id.to_string();
 	let mut file = std::fs::File::open(&file_name).expect("file don't load");
 	/*let metadata= std::fs::metadata(&file_name).expect("unable to read metadata");
 	let mut buffer= vec![0; metadata.len() as usize];*/
 	let mut contents =String::new();
 	file.read_to_string(&mut contents).expect("File read");
-	HttpResponse::Ok().body(contents)
+
+	HttpResponse::Ok().json(&contents[5000*0..5000*1])
 }
 
 pub async fn dwl_key(file_id: web::Path<i32>) -> impl Responder{
@@ -242,6 +248,12 @@ pub async fn remove_content(file_id: web::Path<i32>)-> impl Responder{
 	let path = "../stock/";
 	let file_name= path.to_owned() + &file_id.to_string();
 	std::fs::remove_file(&file_name).expect("file don't load");
+		
+	let path2 = "../key/";
+	let file_name2=path2.to_owned() + &file_id.to_string();
+	std::fs::remove_file(&file_name2).expect("file don't load");
+
+
 	HttpResponse::Ok().body("Delete")
 	
 }
@@ -286,20 +298,21 @@ pub async fn exchange_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> 
 	let path2= "../key/";
 	let file_name= path.to_owned() + &id_c.to_string();
 	let file_name2= path2.to_owned() + &id_c.to_string();
-	//let mut file1 = std::fs::File::open(&file_name);
+	let mut file1 = std::fs::File::open(&file_name);
 	
-	//if file1.is_ok(){
-		//let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
-		//file2.write_all(&item.content.as_bytes()).expect("Don't write");
+	if file1.is_ok(){
+	println!("ici");
+		let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
+		file2.write_all(&item.content.as_bytes()).expect("Don't write");
 		
-	//}
-	//else{
+	}
+	else{
 	let mut file = std::fs::File::create(&file_name).expect("file created");
 	file.write_all(&item.content.as_bytes()).expect("Don't write");
-	let mut file2 = std::fs::File::create(&file_name2).expect("file created");
-	file2.write_all(&item.key.as_bytes()).expect("Don't write");
+	let mut file3 = std::fs::File::create(&file_name2).expect("file created");
+	file3.write_all(&item.key.as_bytes()).expect("Don't write");
 		
-	//}
+	}
 	HttpResponse::Ok().body("Response")
 }
 
