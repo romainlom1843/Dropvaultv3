@@ -20,11 +20,6 @@ use jwt::{encode, Header, Algorithm};
 use rand::{distributions::Alphanumeric, Rng};
 
 
-use pbkdf2::{
-    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
-    Pbkdf2
-};
-use rand_core::OsRng;
 
 #[derive(Debug, RustcEncodable, RustcDecodable)]
 struct Claims {
@@ -129,23 +124,6 @@ else{
     }  
 }
 
-// Key derivation 
-
-pub async fn derive_passwd(item: web::Json<PassLog>) -> HttpResponse {
-
-
-  	let password = item.passwd.as_bytes();
-	let salt = SaltString::generate(&mut OsRng);
-	
-	// Hash password to PHC string ($pbkdf2-sha256$...)
-	let password_hash = Pbkdf2.hash_password_simple(password, salt.as_ref()).expect("derivation").to_string();
-	//println!("{}", password_hash);
-	
-	// Verify password against PHC string
-	let parsed_hash = PasswordHash::new(&password_hash).expect("hash verified");
-	//println!("{}", parsed_hash);
-	HttpResponse::Ok().json(password_hash)
-}
 
 	
 

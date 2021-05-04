@@ -30,11 +30,7 @@ pub struct FileInfo{
 	pub file_name : String,
 	
 }
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DownloadInfo{
-	pub file_id : i32,
-	pub iteration : i32,	
-}
+
 
 
 //Recuperer id d'un file
@@ -148,17 +144,17 @@ fn db_download(pool: web::Data<Pool>, file_id: i32) -> Result<File, diesel::resu
    
     
 }
-pub async fn dwl_content(dl_info: web::Path<DownloadInfo>)-> impl Responder{
+pub async fn dwl_content(file_id: web::Path<i32>)-> impl Responder{
 
+	
 	let path = "../stock/";	
-	let file_name= path.to_owned() + &dl_info.file_id.to_string();
+	let file_name= path.to_owned() + &file_id.to_string();
 	let mut file = std::fs::File::open(&file_name).expect("file don't load");
 	/*let metadata= std::fs::metadata(&file_name).expect("unable to read metadata");
 	let mut buffer= vec![0; metadata.len() as usize];*/
 	let mut contents =String::new();
 	file.read_to_string(&mut contents).expect("File read");
-
-	HttpResponse::Ok().json(&contents[5000*0..5000*1])
+	HttpResponse::Ok().body(&contents)
 }
 
 pub async fn dwl_key(file_id: web::Path<i32>) -> impl Responder{
@@ -298,7 +294,7 @@ pub async fn exchange_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> 
 	let path2= "../key/";
 	let file_name= path.to_owned() + &id_c.to_string();
 	let file_name2= path2.to_owned() + &id_c.to_string();
-	let mut file1 = std::fs::File::open(&file_name);
+	let file1 = std::fs::File::open(&file_name);
 	
 	if file1.is_ok(){
 	println!("ici");
