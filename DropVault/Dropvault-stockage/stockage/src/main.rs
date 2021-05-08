@@ -23,7 +23,7 @@ use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 
-/*async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
+async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<ServiceRequest, Error> {
     let config = req
         .app_data::<Config>()
         .map(|data| data.get_ref().clone())
@@ -38,7 +38,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
         }
         Err(_) => Err(AuthenticationError::from(config).into()),
     }
-}*/
+}
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -55,13 +55,14 @@ async fn main() -> std::io::Result<()> {
         
     HttpServer::new(move || {
      
-  //let auth = HttpAuthentication::bearer(validator);
+  let auth = HttpAuthentication::bearer(validator);
  
      
         App::new()
-       	//.wrap(auth)
+       	.wrap(auth)
         	.data(pool.clone())
         	.route("/file/{user_name}/{file_name}", web::get().to(files::get_file_id))
+        	.route("/ext/{file_name}", web::get().to(files::get_type))
             	.route("/files/{username}", web::get().to(files::get_files))
             	.route("/size/{username}", web::get().to(files::get_size))
             	.route("/type/{username}", web::get().to(files::get_type))

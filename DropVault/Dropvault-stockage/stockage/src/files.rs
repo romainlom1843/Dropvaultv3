@@ -30,6 +30,11 @@ pub struct FileInfo{
 	pub file_name : String,
 	
 }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FileInfo2{
+	pub file_name : String,
+	
+}
 
 
 
@@ -51,7 +56,24 @@ fn get_files_id(pool: web::Data<Pool>, user_name: String, file_name: String) -> 
     Ok(file_id)
     
 }
+//Recuperer type d'un file
+pub async fn get_type_file(db: web::Data<Pool>, info: web::Path<FileInfo2>) -> Result<HttpResponse, Error> {
 
+	Ok(
+		web::block(move || get_types_file(db, info.file_name.to_string()))
+        	.await
+        	.map(|file| HttpResponse::Ok().json(file))
+        	.map_err(|_| HttpResponse::InternalServerError())?)
+   
+}
+fn get_types_file(pool: web::Data<Pool>, file_name: String) -> Result<String, diesel::result::Error> {
+	
+    
+    let conn = pool.get().expect("database pool");
+    let type_file = files.select(ext).filter(filename.eq(&file_name)).first::<String>(&conn)?;
+    Ok(type_file)
+    
+}
 
 
 
