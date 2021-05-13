@@ -19,6 +19,7 @@ pub struct InputFile {
     pub sizing: String,
     pub ext: String,
 }
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FormData{
 	pub content : String,	
@@ -192,7 +193,7 @@ pub async fn dwl_key(file_id: web::Path<i32>) -> impl Responder{
 
 
 // Récupération des données
-//Recuperer tous les noms par username
+//Recuperer tous les fichiers par username
 pub async fn get_files(db: web::Data<Pool>, file_username: web::Path<String>) -> Result<HttpResponse, Error> {
 
 	Ok(
@@ -277,60 +278,4 @@ pub async fn remove_content(file_id: web::Path<i32>)-> impl Responder{
 }
 
 
-
-
-// Echange file
-pub async fn echange(  db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<HttpResponse, Error>{
-	
-    Ok(web::block(move || echange_file(db, item))
-        .await
-        .map(|file| HttpResponse::Created().json(file))
-        .map_err(|_| HttpResponse::InternalServerError())?)
-}
-fn echange_file(db: web::Data<Pool>, item: web::Json<InputFile>) -> Result<File, diesel::result::Error> {
-    let conn = db.get().expect("pool database");
-    let id_file = files.select(id).filter(filename.eq(&item.filename)).filter(username.eq(&item.username)).get_result::<i32>(&conn);
-
-if id_file.is_ok() == false
-  {
-    let new_file = NewFile {
-        filename: &item.filename,
-        username: &item.username,
-        sizing: &item.sizing,
-    	ext: &item.ext,
-        created_at: chrono::Local::now().naive_local(),
-    };
-    let res = insert_into(files).values(&new_file)/*.on_conflict((filename, username)).do_update().set(content.eq(&item.content))*/.get_result::<File>(&conn)?;
-    Ok(res)
-    }
-  else
-    {
-     return Err(NotFound);
-    }
-   
-}
-pub async fn exchange_content(id_c: web::Path<u8>, item: web::Json<FormData>)-> impl Responder{
-
-	
-	let path = "../stock/";
-	let path2= "../key/";
-	let file_name= path.to_owned() + &id_c.to_string();
-	let file_name2= path2.to_owned() + &id_c.to_string();
-	let file1 = std::fs::File::open(&file_name);
-	
-	if file1.is_ok(){
-	println!("ici");
-		let mut file2 = std::fs::OpenOptions::new().write(true).append(true).open(&file_name).expect("file already created");
-		file2.write_all(&item.content.as_bytes()).expect("Don't write");
-		
-	}
-	else{
-	let mut file = std::fs::File::create(&file_name).expect("file created");
-	file.write_all(&item.content.as_bytes()).expect("Don't write");
-	let mut file3 = std::fs::File::create(&file_name2).expect("file created");
-	file3.write_all(&item.key.as_bytes()).expect("Don't write");
-		
-	}
-	HttpResponse::Ok().body("Response")
-}
 
