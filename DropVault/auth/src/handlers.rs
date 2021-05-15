@@ -96,7 +96,7 @@ pub async fn get_user(db: web::Data<Pool>, item: web::Json<InputLogin>) -> Resul
 fn db_get_user_by_id(pool: web::Data<Pool>, item: web::Json<InputLogin>) -> Result<String,diesel::result::Error> {
     let conn = pool.get().expect("db_recup");
     let hashed = users.select(hashe).filter(username.eq(&item.username)).get_result::<String>(&conn).expect("Hashed");
-    let expiration = Utc::now().checked_add_signed(chrono::Duration::seconds(300)).expect("valid timestamp").timestamp();
+    let expiration = Utc::now().checked_add_signed(chrono::Duration::seconds(3000)).expect("valid timestamp").timestamp();
     let valid = verify(&item.passwd, &hashed).expect("Password verify");
     if valid == true
     {
