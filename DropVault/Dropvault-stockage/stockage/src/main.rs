@@ -10,10 +10,10 @@ use diesel::r2d2::{self, ConnectionManager};
 
  
 mod files;
-mod errors;
 mod schema;
 mod models;
 mod auth;
+mod errors;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
@@ -62,7 +62,7 @@ async fn main() -> std::io::Result<()> {
        	.wrap(auth)
         	.data(pool.clone())
         	.route("/file/{user_name}/{file_name}", web::get().to(files::get_file_id))
-        	.route("/ext/{file_name}", web::get().to(files::get_type))
+        	.route("/ext/{file_name}", web::get().to(files::get_type_file))
             	.route("/files/{username}", web::get().to(files::get_files))
             	.route("/size/{username}", web::get().to(files::get_size))
             	.route("/type/{username}", web::get().to(files::get_type))

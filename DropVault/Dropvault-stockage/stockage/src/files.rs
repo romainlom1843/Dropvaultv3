@@ -8,7 +8,6 @@ use diesel::dsl::{delete, insert_into};
 use serde::{Deserialize, Serialize};
 use std::vec::Vec;
 use crate::diesel::ExpressionMethods;
-use diesel::NotFound;
 use std::io::Write;
 use std::io::Read;
 
